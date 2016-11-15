@@ -3,21 +3,17 @@ package wargame;
 import java.awt.Graphics;
 
 public class Carte implements ICarte,IConfig{
-	private Element[][] elements=new Element[LARGEUR_CARTE][HAUTEUR_CARTE];
+	private Element[][] elements = new Element[LARGEUR_CARTE][HAUTEUR_CARTE];
 	
-	Element getElement(Position pos)
-	{
+	Element getElement(Position pos){
 		return elements[pos.getX()][pos.getY()];
 	}
-	Position trouvePositionVide() // Trouve aléatoirement une position vide sur la carte
-	{
+	Position trouvePositionVide(){ 				// Trouve aléatoirement une position vide sur la carte
 		
 	}
-	Position trouvePositionVide(Position pos); // Trouve une position vide choisie
-								// aléatoirement parmi les 8 positions adjacentes de pos
-	Heros trouveHeros(); // Trouve aléatoirement un héros sur la carte
-	Heros trouveHeros(Position pos); // Trouve un héros choisi aléatoirement
-									 // parmi les 8 positions adjacentes de pos
+	Position trouvePositionVide(Position pos); 	// Trouve une position vide choisie aléatoirement parmi les 8 positions adjacentes de pos
+	Heros trouveHeros(); 						// Trouve aléatoirement un héros sur la carte
+	Heros trouveHeros(Position pos); 			// Trouve un héros choisi aléatoirement parmi les 8 positions adjacentes de pos
 	boolean deplaceSoldat(Position pos, Soldat soldat);
 	void mort(Soldat perso);
 	boolean actionHeros(Position pos, Position pos2);
