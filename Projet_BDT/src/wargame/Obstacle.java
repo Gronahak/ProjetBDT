@@ -1,6 +1,5 @@
 package wargame;
 import java.awt.Color;
-import java.awt.Graphics;
 public class Obstacle extends Element implements IConfig{
 	public enum TypeObstacle {
 		ROCHER (COULEUR_ROCHER), FORET (COULEUR_FORET), EAU (COULEUR_EAU);
@@ -10,9 +9,12 @@ public class Obstacle extends Element implements IConfig{
 			return values()[(int)(Math.random()*values().length)];
 		}
 	}
+	
 	private TypeObstacle TYPE;
+	
 	Obstacle(TypeObstacle type, Position pos) { 
-		TYPE = type; this.pos = pos; 
+		TYPE = type; this.pos = pos;
+		couleur=TYPE.COULEUR;
 	}
 	public String toString() {
 		return ""+TYPE;
