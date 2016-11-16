@@ -5,18 +5,27 @@ package wargame;
  * @author emilie
  * @version 15/11/16
  */
-public abstract class Soldat implements ISoldat{
+public  class Soldat  extends Element implements ISoldat  {
+	private final int pointsVieMax;
+	private final int portee;
+	private final int tir;
+	private final int puissance;
+	private int pointsVieActuels;
 	
-	protected int points;
-	protected int portee;
-	protected int tir;
-	protected int puissance;
-	
-	public Soldat(){
-		points = 0;
-		portee = 0;
-		tir = 0;
-		puissance = 0;
+
+	public Soldat(TypesM type,Position pos){
+		super(pos);
+		pointsVieMax = type.getPoints();
+		portee = type.getPortee();
+		tir = type.getTir();
+		puissance = type.getPuissance();
+	}
+	public Soldat(TypesH type,Position pos){
+		super(pos);
+		pointsVieMax = type.getPoints();
+		portee = type.getPortee();
+		tir = type.getTir();
+		puissance = type.getPuissance();
 	}
 	
 	public int getTour(){
@@ -33,5 +42,21 @@ public abstract class Soldat implements ISoldat{
 
 	public void seDeplace(Position newPos){
 		
+	}
+
+	public int getPoints() {
+		return pointsVieMax;
+	}
+
+	public int getPuissance() {
+		return puissance;
+	}
+
+	public int getTir() {
+		return tir;
+	}
+
+	public int getPortee() {
+		return portee;
 	}
 }
