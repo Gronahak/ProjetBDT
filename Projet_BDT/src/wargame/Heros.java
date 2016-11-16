@@ -1,5 +1,7 @@
 package wargame;
 
+import wargame.ISoldat.TypesM;
+
 /**
  * Classe Heros
  * @author emilie
@@ -7,28 +9,13 @@ package wargame;
  */
 
 public class Heros extends Soldat{
-	public Heros(){
-		super();
-		TypesH type = TypesH.getTypeHAlea();
-		points = type.getPoints();
-		portee = type.getPortee();
-		puissance = type.getPuissance();
-		tir = type.getTir(); 
+	private TypesH TYPE;
+
+	public Heros(TypesH type,Position pos){
+		super(TypesH.getTypeHAlea(),pos);
+		TYPE=type;
+		couleur=COULEUR_HEROS;
 	}
 	
-	public int getPoints(){
-		return points;
-	}
-
-	public int getPortee(){
-		return portee;
-	}
 	
-	public int getPuissance(){
-		return puissance;
-	}
-
-	public int getTir(){
-		return tir;
-	}
 }
