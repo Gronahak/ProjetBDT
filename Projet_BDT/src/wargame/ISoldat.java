@@ -1,7 +1,7 @@
 package wargame;
 
 public interface ISoldat {
-	static enum TypesH {
+	public static enum TypesH {
 		HUMAIN(40, 3, 10, 2), NAIN(80, 1, 20, 0), ELF(70, 5, 10, 6), HOBBIT(20, 3, 5, 2);
 		private final int POINTS_DE_VIE, PORTEE_VISUELLE, PUISSANCE, TIR;
 
@@ -67,9 +67,13 @@ public interface ISoldat {
 
 	int getPoints();
 
-	int getTour();
+	int getPuissance();
+
+	int getTir();
 
 	int getPortee();
+
+	int getTour();
 
 	void joueTour(int tour);
 
