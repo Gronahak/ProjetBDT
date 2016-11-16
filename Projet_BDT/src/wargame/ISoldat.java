@@ -1,9 +1,5 @@
 package wargame;
-/**
- * Interface pour les Soldats du jeu.
- * @author Rémy
- * @version 16/11/2016
- */
+
 public interface ISoldat {
 	public static enum TypesH {
 		HUMAIN(40, 3, 10, 2), NAIN(80, 1, 20, 0), ELF(70, 5, 10, 6), HOBBIT(20, 3, 5, 2);
@@ -68,52 +64,20 @@ public interface ISoldat {
 			return values()[(int) (Math.random() * values().length)];
 		}
 	}
-	
-	/**
-	 * Récupère les points de vie du soldat courant.
-	 * @return les points de vie (entier)
-	 */
+
 	int getPoints();
-	
-	/**
-	 * Récupère la puissance physique du soldat courant.
-	 * @return la puissance (entier)
-	 */
+
 	int getPuissance();
-	
-	/**
-	 * Récupère la puissance de tir du soldat courant.
-	 * @return le tir (entier)
-	 */
+
 	int getTir();
-	
-	/**
-	 * Récupère le champ de vision du soldat courant.
-	 * @return la portée (entier)
-	 */
+
 	int getPortee();
 
-	/**
-	 * ?
-	 * @return un entier
-	 */
 	int getTour();
 
-	/**
-	 * Fais jouer le soldat courant pour le tour {@code tour}.
-	 * @param tour le tour de jeu
-	 */
 	void joueTour(int tour);
 
-	/**
-	 * Fais combattre le soldat courant avec le soldat en paramètre.
-	 * @param soldat le soldat avec qui se battre
-	 */
 	void combat(Soldat soldat);
 
-	/**
-	 * Déplace le soldat courant à la position en paramètre.
-	 * @param newPos la nouvelle position du soldat
-	 */
 	void seDeplace(Position newPos);
 }

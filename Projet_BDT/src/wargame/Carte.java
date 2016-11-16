@@ -1,7 +1,6 @@
 package wargame;
 
 import java.awt.Graphics;
-<<<<<<< HEAD
 
 import javax.swing.JPanel;
 
@@ -42,10 +41,9 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		}
 	}
 
-
-
-	
-	public Element getElement(Position pos){
+	public Element getElement(Position pos) {
+		return elements[pos.getX()][pos.getY()];
+	}
 
 	public Position trouvePositionVide(int zone) { // Trouve aléatoirement une position
 											// vide sur la carte dans la zone spécifiée (Gauche, Droite, ou toute la carte)
@@ -58,6 +56,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		} while ((elements[x][y] instanceof Soldat) || (elements[x][y] instanceof Obstacle));
 
 		return elements[x][y].pos;
+
 	}
 
 	public Position trouvePositionVide(Position pos) { // Trouve une position
@@ -141,6 +140,5 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	public boolean estVide(Position pos) {
 		return (elements[pos.getX()][pos.getY()] == null);
 	}
-
 
 }
