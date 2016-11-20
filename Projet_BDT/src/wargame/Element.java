@@ -12,7 +12,7 @@ public class Element implements IConfig{
 		pos=new Position(0,0);
 	}
 	Element(Position pos){
-		super();
+		this();
 		this.pos=pos;
 	}
 	public void setPosition(Position position){
@@ -35,7 +35,9 @@ public class Element implements IConfig{
 
 	}
 	public String toString(){
-		return "Je dessine un "+this.getClass().getSimpleName()+" en case "+pos;
+		//return "Je dessine un "+this.getClass().getSimpleName()+" en case "+pos;
+		return "";
 	}
+	
 
 }
