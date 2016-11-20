@@ -16,6 +16,8 @@ import wargame.PanneauJeu;
 public class FenetreJeu  implements IConfig {
 	public static int abs=0;
 	public static int ord=0;
+	private static Boolean soldatSelectionne=false;
+	private static Position curseur1;
 	public static void main(String[] args){
 		
 		JFrame frame = new JFrame("Wargame");
@@ -39,7 +41,31 @@ public class FenetreJeu  implements IConfig {
 				if (curseur.estValide())
 			infosBot.setText(curseur+panneauJeu.getInfos(curseur));
 			}
-		})	;	
+		})	;
+		
+		panneauJeu.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				abs=e.getX()/NB_PIX_CASE;
+				ord=e.getY()/NB_PIX_CASE;
+				curseur1=new Position(abs,ord);
+				if (panneauJeu.carte.getElement(curseur1) instanceof Heros){
+					soldatSelectionne=true;
+				}
+			}
+			public void mouseReleased(MouseEvent e){
+				abs=e.getX()/NB_PIX_CASE;
+				ord=e.getY()/NB_PIX_CASE;
+				Position curseur=new Position(abs,ord);
+				if (soldatSelectionne==true){
+					
+						panneauJeu.carte.actionHeros(curseur1, curseur);
+						soldatSelectionne=false;
+						panneauJeu.repaint();
+				}
+
+			}
+		})	;
+		
 		infosTop.setOpaque(true);
 		infosTop.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,2*NB_PIX_CASE));
 		infosTop.setBackground(COULEUR_VIDE);
