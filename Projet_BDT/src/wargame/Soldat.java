@@ -10,22 +10,32 @@ public  class Soldat  extends Element implements ISoldat  {
 	private final int portee;
 	private final int tir;
 	private final int puissance;
+	private final String nom;
+	private final String race;
+
 	private int pointsVieActuels;
 	
 
-	public Soldat(TypesM type,Position pos){
+	public Soldat(Carte carte,TypesM type,String nom,Position pos){
 		super(pos);
 		pointsVieMax = type.getPoints();
+		pointsVieActuels=pointsVieMax;
 		portee = type.getPortee();
 		tir = type.getTir();
 		puissance = type.getPuissance();
+		this.nom=nom;
+		this.race=type.name();
 	}
-	public Soldat(TypesH type,Position pos){
+	public Soldat(Carte carte,TypesH type,String nom,Position pos){
 		super(pos);
 		pointsVieMax = type.getPoints();
+		pointsVieActuels=pointsVieMax;
 		portee = type.getPortee();
 		tir = type.getTir();
 		puissance = type.getPuissance();
+		this.nom=nom;
+		this.race=type.name();
+
 	}
 	
 	public int getTour(){
@@ -58,5 +68,8 @@ public  class Soldat  extends Element implements ISoldat  {
 
 	public int getPortee() {
 		return portee;
+	}
+	public String toString(){
+		return " "+race+" "+nom+" (" + pointsVieActuels + "PV/" + pointsVieMax + ")";
 	}
 }
