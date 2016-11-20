@@ -108,7 +108,23 @@ public class Carte extends JPanel implements ICarte, IConfig {
 
 	public boolean deplaceSoldat(Position pos, Soldat soldat) {
 		if (pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
+			elements[soldat.pos.getX()][soldat.pos.getY()]=new Element(soldat.pos);
+			System.out.println(elements[soldat.pos.getX()][soldat.pos.getY()]+""+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+""+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
+
+			//System.out.println("1\t"+soldat.getPosition());
+			System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][pos.getY()].couleur);
 			soldat.seDeplace(pos);
+			System.out.println("WTF2 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+			
+			elements[pos.getX()][pos.getY()]=soldat;
+			System.out.println("WTF3 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+			
+			//((Soldat)elements[pos.getX()][pos.getY()]).seDeplace(pos);
+			//System.out.println("2\t"+soldat.getPosition());
+			System.out.println(elements[pos.getX()][pos.getY()]+""+elements[pos.getX()][pos.getY()].couleur+""+elements[pos.getX()][pos.getY()].pos);
+
+			actualiserChampDeVision();
 			return true;
 		}
 		return false;
@@ -119,7 +135,25 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	}
 
 	public boolean actionHeros(Position pos, Position pos2) {
-		return true;
+
+		if (!(elements[pos.getX()][pos.getY()] instanceof Heros)){
+			return false;
+		}
+		if (elements[pos2.getX()][pos2.getY()].estVide()) {
+
+			deplaceSoldat(pos2,(Soldat) elements[pos.getX()][pos.getY()]);
+			return true;
+
+		}
+		else if (elements[pos2.getX()][pos2.getY()] instanceof Monstre
+				&& (((Soldat)elements[pos.getX()][pos.getY()]).estAPortee((Monstre)elements[pos2.getX()][pos2.getY()]))
+				){
+			((Soldat)elements[pos.getX()][pos.getY()]).combat((Soldat)elements[pos2.getX()][pos2.getY()]);
+			return true;
+
+		}
+		
+		return false;
 	}
 
 	public void jouerSoldats(PanneauJeu pj) {
@@ -129,19 +163,42 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		super.paintComponent(g);
 		int i, j;
 
+		actualiserChampDeVision();
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
+				System.out.println("("+i+" "+j+"(");
 				elements[i][j].seDessiner(g);
-				//System.out.println(elements[i][j]);
-			}
+				}
+		System.out.println("______________________");
 
 	}
 
 	public boolean estVide(Position pos) {
-		return (elements[pos.getX()][pos.getY()] == null);
+		return (elements[pos.getX()][pos.getY()].couleur == COULEUR_VIDE);
 	}
 
 	public String nombreSoldatsRestant(){
 		return ""+heros.length+" héros et "+monstres.length+" monstres";
+	}
+	public void actualiserChampDeVision(){
+		int k,l;
+		for (k=0;k<LARGEUR_CARTE;k++)
+			for(l=0;l<HAUTEUR_CARTE;l++)
+				elements[k][l].estVisible=false;
+		for (final Heros h:heros){
+			int porteeVisuelle=h.getPortee();
+			Position positionTmp=new Position(0,0);
+			for (int i=h.getPosition().getX()-porteeVisuelle;i<=h.getPosition().getX()+porteeVisuelle;i++){
+				for (int j=h.getPosition().getY()-porteeVisuelle;j<=h.getPosition().getY()+porteeVisuelle;j++){
+					positionTmp.setX(i);
+					positionTmp.setY(j);
+					if (!positionTmp.estValide())continue;
+					elements[positionTmp.getX()][positionTmp.getY()].estVisible=true;
+				//	System.out.println("elements ("+positionTmp.getX()+","+positionTmp.getY()+""+elements[positionTmp.getX()][positionTmp.getY()].estVisible);
+					repaint();
+				}
+				
+			}
+		}
 	}
 }
