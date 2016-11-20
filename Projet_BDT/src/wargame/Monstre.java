@@ -9,8 +9,8 @@ package wargame;
 public class Monstre  extends Soldat{
 	private TypesM TYPE;
 	
-	public Monstre(TypesM type,Position pos){
-	 super(type,pos);
+	public Monstre(Carte carte,TypesM type,String nom,Position pos){
+	 super(carte,type,nom,pos);
 	 TYPE=type;
 		couleur=COULEUR_MONSTRES;
 	}
