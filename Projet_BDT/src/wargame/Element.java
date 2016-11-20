@@ -6,9 +6,12 @@ import java.awt.Graphics;
 public class Element implements IConfig{
 
 	protected Position pos;
-	protected Color couleur=COULEUR_VIDE;
+	protected Color couleur;;
+	protected Boolean estVisible=false;
+	static Carte carte=null;
 	
 	Element (){
+		couleur=COULEUR_VIDE;
 		pos=new Position(0,0);
 	}
 	Element(Position pos){
@@ -22,12 +25,16 @@ public class Element implements IConfig{
 		return pos;
 	}
 	public boolean estVide(){
-		return (this==null);
+		return (couleur==COULEUR_VIDE);
 	}
-	
+	public void setCarte(Carte car){
+		carte=car;
+	}
 	public void seDessiner(Graphics g) {
 		
-		g.setColor(couleur);
+		if (estVisible)
+			g.setColor(couleur);
+		else g.setColor(COULEUR_INCONNU);
 		g.fillRect(pos.getX()*NB_PIX_CASE, pos.getY()*NB_PIX_CASE, NB_PIX_CASE, NB_PIX_CASE);
 		g.setColor(Color.black);
 		g.drawRect(pos.getX()*NB_PIX_CASE, pos.getY()*NB_PIX_CASE, NB_PIX_CASE, NB_PIX_CASE);
