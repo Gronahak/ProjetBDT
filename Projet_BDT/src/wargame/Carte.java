@@ -21,13 +21,13 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			}
 		heros = new Heros[NB_HEROS];
 		for (i = 0; i < NB_HEROS; i++) {
-			heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea(),trouvePositionVide(GAUCHE));
+			heros[i] = new Heros(this,ISoldat.TypesH.getTypeHAlea(),"Y",trouvePositionVide(GAUCHE));
 		
 			elements[heros[i].getPosition().getX()][heros[i].getPosition().getY()] = heros[i];
 		}
 		monstres = new Monstre[NB_MONSTRES];
 		for (i = 0; i < NB_MONSTRES; i++) {
-			monstres[i] = new Monstre(ISoldat.TypesM.getTypeMAlea(),trouvePositionVide(DROITE));
+			monstres[i] = new Monstre(this,ISoldat.TypesM.getTypeMAlea(),"Y",trouvePositionVide(DROITE));
 			
 			elements[monstres[i].getPosition().getX()][monstres[i].getPosition().getY()] = monstres[i];
 
@@ -132,7 +132,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
 				elements[i][j].seDessiner(g);
-				System.out.println(elements[i][j]);
+				//System.out.println(elements[i][j]);
 			}
 
 	}
@@ -141,4 +141,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		return (elements[pos.getX()][pos.getY()] == null);
 	}
 
+	public String nombreSoldatsRestant(){
+		return ""+heros.length+" héros et "+monstres.length+" monstres";
+	}
 }
