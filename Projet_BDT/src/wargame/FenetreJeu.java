@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,12 +25,19 @@ public class FenetreJeu  implements IConfig {
 		JPanel infosTop = new JPanel();
 		JLabel infosBot = new JLabel("vide");
 		
-		frame.addMouseMotionListener(new MouseAdapter(){
-			public void MouseMoved(MouseEvent e){
-				abs=e.getX();
-				ord=e.getY();
-			infosBot.setText("coord : "+abs+" " +ord);
-			System.out.println("ee");
+		JButton finDuTour=new JButton("Fin du tour");
+		JLabel encoreEnVie=new JLabel("Il reste "+panneauJeu.nbSoldats());
+		
+		infosTop.add(finDuTour);
+		infosTop.add(encoreEnVie);
+		
+		panneauJeu.addMouseMotionListener(new MouseAdapter(){
+			public void mouseMoved(MouseEvent e){
+				abs=e.getX()/NB_PIX_CASE;
+				ord=e.getY()/NB_PIX_CASE;
+				Position curseur=new Position(abs,ord);
+				if (curseur.estValide())
+			infosBot.setText(curseur+panneauJeu.getInfos(curseur));
 			}
 		})	;	
 		infosTop.setOpaque(true);
