@@ -11,8 +11,8 @@ import wargame.ISoldat.TypesM;
 public class Heros extends Soldat{
 	private TypesH TYPE;
 
-	public Heros(TypesH type,Position pos){
-		super(TypesH.getTypeHAlea(),pos);
+	public Heros(Carte carte,TypesH type,String nom,Position pos){
+		super(carte,type,nom,pos);
 		TYPE=type;
 		couleur=COULEUR_HEROS;
 	}
