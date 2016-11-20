@@ -6,9 +6,10 @@ public class PanneauJeu extends JPanel implements IConfig {
 
 	
 	private static final long serialVersionUID = 1L;
-	Carte testcarte=new Carte();
+	Carte carte;
 
 	PanneauJeu(){
+		carte=new Carte();
 	//	this.setOpaque(true);
 	//	this.setBackground(Color.GRAY); 
 		this.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,HAUTEUR_CARTE*NB_PIX_CASE));
@@ -21,7 +22,13 @@ public class PanneauJeu extends JPanel implements IConfig {
 	public void paintComponent(Graphics g){
 
 		super.paintComponent(g);
-		testcarte.toutDessiner(g);
+		carte.toutDessiner(g);
 
+	}
+	public String getInfos(Position pos){
+		return carte.getElement(pos).toString();
+	}
+	public String nbSoldats(){
+		return carte.nombreSoldatsRestant();
 	}
 }
