@@ -65,7 +65,7 @@ public  class Soldat  extends Element implements ISoldat  {
 			if (soldat.getPointsVieActuels()<=0) carte.mort(soldat);
 			else {
 				if (soldat.estAPortee(this)){
-					forceDeFrappe=(int)Math.floor(Math.random()*soldat.getPuissance());
+					forceDeFrappe=(int)Math.floor(Math.random()*soldat.getTir());
 					this.diminuerPointsVieActuels(forceDeFrappe);
 					if (this.getPointsVieActuels()<=0) carte.mort(this);
 				}
