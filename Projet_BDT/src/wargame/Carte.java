@@ -131,7 +131,11 @@ System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][po
 	}
 
 	public void mort(Soldat perso) {
-		perso = null;
+		elements[perso.getPosition().getX()][perso.getPosition().getY()]=new Element(new Position(perso.getPosition().getX(),perso.getPosition().getY()));
+
+		/* utiliser tables de hash, au moins pour les 2 tableaux monstres et héros et virer le soldat du tableau le cas échéant quand il meurt pour perdre la vision autour du-dit soldat*/
+		actualiserChampDeVision();
+
 	}
 
 	public boolean actionHeros(Position pos, Position pos2) {
