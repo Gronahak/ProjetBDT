@@ -26,7 +26,9 @@ public class PanneauJeu extends JPanel implements IConfig {
 
 	}
 	public String getInfos(Position pos){
+		if (carte.getElement(pos).estVisible)
 		return carte.getElement(pos).toString();
+		return "";
 	}
 	public String nbSoldats(){
 		return carte.nombreSoldatsRestant();
