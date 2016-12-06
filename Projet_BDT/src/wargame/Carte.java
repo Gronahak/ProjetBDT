@@ -169,10 +169,10 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		}
 		
 		if(((Soldat)elements[pos.getX()][pos.getY()]).getTour()){		//verifie que le soldat n'a pas joué ce tour
-			((Soldat)elements[pos.getX()][pos.getY()]).setTour(false);	//previent que le soldat joue ce tour
 
 			if (elements[pos2.getX()][pos2.getY()].estVide() && pos2.estVoisine(pos)) {
 																//ajout ^ pour se deplacer d'une seule case
+				((Soldat)elements[pos.getX()][pos.getY()]).setTour(false);	//previent que le soldat joue ce tour
 				deplaceSoldat(pos2,(Soldat) elements[pos.getX()][pos.getY()]);
 				return true;
 	
@@ -180,6 +180,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			else if (elements[pos2.getX()][pos2.getY()] instanceof Monstre
 					&& (((Soldat)elements[pos.getX()][pos.getY()]).estAPortee((Monstre)elements[pos2.getX()][pos2.getY()]))
 					){
+				((Soldat)elements[pos.getX()][pos.getY()]).setTour(false);	//previent que le soldat joue ce tour
 				((Soldat)elements[pos.getX()][pos.getY()]).combat((Soldat)elements[pos2.getX()][pos2.getY()]);
 				return true;
 	
