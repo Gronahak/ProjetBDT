@@ -1,7 +1,7 @@
 package wargame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+//import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,6 +33,8 @@ public class FenetreJeu  implements IConfig {
 		finDuTour.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				panneauJeu.carte.finTourH();
+				panneauJeu.carte.tourMonstre();
+				panneauJeu.repaint();
 			}
 		});
 		
