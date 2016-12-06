@@ -1,30 +1,18 @@
 package wargame;
 
+
 /**
  * Classe Monstre
  * @author emilie
  * @version 15/11/16
  */
 public class Monstre  extends Soldat{
-	private TypesM type;
+	private TypesM TYPE;
 	
-	public Monstre(){
-		type = TypesM.getTypeMAlea();
-	}
-	
-	public int getPoints(){
-		return type.getPoints();
+	public Monstre(Carte carte,TypesM type,String nom,Position pos){
+	 super(carte,type,nom,pos);
+	 TYPE=type;
+		couleur=COULEUR_MONSTRES;
 	}
 
-	public int getPortee(){
-		return type.getPortee();
-	}
-	
-	public int getPuissance(){
-		return type.getPuissance();
-	}
-
-	public int getTir(){
-		return type.getTir();
-	}
 }
