@@ -9,11 +9,14 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	private Heros[] heros;
 	private Monstre[] monstres ;
 	private Obstacle[] obstacles;
+//	private static int nbH = NB_HEROS;
+//	private static int nbM = NB_MONSTRES;
 	private final static int GAUCHE=1;
 	private final static int DROITE=2;
 	private final static int TOUTE=3;
 	Carte() {
 		int i, j;
+		//initialisation tableau elements
 		elements = new Element[LARGEUR_CARTE][HAUTEUR_CARTE];
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
@@ -52,6 +55,12 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		this.elements[pos.getX()][pos.getY()] = e;
 	}
 
+	public void echangeElement(Position pos1, Position pos2){
+		Element tmp = getElement(pos1);
+		setElement(getElement(pos2), pos1);
+		setElement(tmp, pos2);
+	}
+	
 	public Position trouvePositionVide(int zone) { // Trouve aléatoirement une position
 											// vide sur la carte dans la zone spécifiée (Gauche, Droite, ou toute la carte)
 		int x, y, delta=2,decalage=0;
@@ -72,16 +81,19 @@ public class Carte extends JPanel implements ICarte, IConfig {
 														// les 8 positions
 														// adjacentes de pos
 		int dx, dy;
-		int resultatX, resultatY;
+		//int resultatX, resultatY;
 		Position resultat;
 		do {
 			dx = (int) Math.floor(Math.random() * 3) - 1;
 			dy = (int) Math.floor(Math.random() * 3) - 1;
-			resultatX = pos.getX() + dx;
-			resultatY = pos.getY() + dy;
-			resultat = new Position(resultatX, resultatY);
-		} while (!resultat.estValide() || !elements[resultatX][resultatY].estVide());
-		return elements[resultatX][resultatY].getPosition();
+//			resultatX = pos.getX() + dx;
+//			resultatY = pos.getY() + dy;
+//			resultat = new Position(resultatX, resultatY);
+//		} while (!resultat.estValide() || !elements[resultatX][resultatY].estVide());
+//		return elements[resultatX][resultatY].getPosition();
+			resultat = new Position(pos.getX() + dx, pos.getY() + dy);
+			} while (!resultat.estValide() || !elements[pos.getX() + dx][pos.getY() + dy].estVide());
+			return elements[pos.getX() + dx][pos.getY() + dy].getPosition();
 	}
 
 	public Heros trouveHeros() { // Trouve aléatoirement un héros sur la carte
@@ -115,7 +127,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	public boolean deplaceSoldat(Position pos, Soldat soldat) {
 		if (pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
 			elements[soldat.pos.getX()][soldat.pos.getY()]=new Element(soldat.pos);
-			System.out.println(elements[soldat.pos.getX()][soldat.pos.getY()]+""+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+""+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
+			System.out.println("1 "+elements[soldat.pos.getX()][soldat.pos.getY()]+"\n2 "+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+"\n3 "+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
 
 			//System.out.println("1\t"+soldat.getPosition());
 			System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
@@ -139,7 +151,12 @@ public class Carte extends JPanel implements ICarte, IConfig {
 
 	public void mort(Soldat perso) {
 		elements[perso.getPosition().getX()][perso.getPosition().getY()]=new Element(new Position(perso.getPosition().getX(),perso.getPosition().getY()));
-
+//		if (perso instanceof Heros){
+//			nbH --;	
+//		}
+//		if (perso instanceof Monstre){
+//			nbM --;	
+//		}
 		/* utiliser tables de hash, au moins pour les 2 tableaux monstres et héros et virer le soldat du tableau le cas échéant quand il meurt pour perdre la vision autour du-dit soldat*/
 		actualiserChampDeVision();
 
@@ -151,11 +168,11 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			return false;
 		}
 		
-		if(((Soldat)elements[pos.getX()][pos.getY()]).getTour()){
-			((Soldat)elements[pos.getX()][pos.getY()]).setTour(false);
-			elements[pos.getX()][pos.getY()].couleur = COULEUR_HEROS_DEJA_JOUE;
-			if (elements[pos2.getX()][pos2.getY()].estVide()) {
-	
+		if(((Soldat)elements[pos.getX()][pos.getY()]).getTour()){		//verifie que le soldat n'a pas joué ce tour
+			((Soldat)elements[pos.getX()][pos.getY()]).setTour(false);	//previent que le soldat joue ce tour
+
+			if (elements[pos2.getX()][pos2.getY()].estVide() && pos2.estVoisine(pos)) {
+																//ajout ^ pour se deplacer d'une seule case
 				deplaceSoldat(pos2,(Soldat) elements[pos.getX()][pos.getY()]);
 				return true;
 	
@@ -182,7 +199,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		actualiserChampDeVision();
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
-				System.out.println("("+i+" "+j+"(");
+				//System.out.println("("+i+" "+j+"(");
 				elements[i][j].seDessiner(g);
 				}
 		System.out.println("______________________");
@@ -194,6 +211,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	}
 
 	public String nombreSoldatsRestant(){
+		//return ""+nbH+" héros et "+nbM+" monstres";
 		return ""+heros.length+" héros et "+monstres.length+" monstres";
 	}
 	public void actualiserChampDeVision(){
@@ -218,39 +236,35 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		}
 	}
 	
+	public void finTourH(){
+		for(int i=0; i<NB_HEROS; i++){
+			heros[i].setTour(true);
+		}
+	}
+	
 	public void tourMonstre(){
 		for(int i=0; i<NB_MONSTRES; i++){
-			
 			int j;
+//			Element e = elements[monstres[i].getPosition().getX()][monstres[i].getPosition().getY()];
 			for(j=0; j<NB_HEROS; j++){
 				if(monstres[i].estAPortee(heros[j])){ 	//attaque si heros a portée
 					System.out.println(i+" attaque "+j);
 					monstres[i].combat(heros[j]);
+					j=NB_HEROS;
 				}else{
 					if(j==NB_HEROS-1){ 					//sinon se deplace
 						System.out.println(i+" se deplace");
+						//echangeElement(monstres[i].pos, trouvePositionVide(monstres[i].pos));
 						monstres[i].seDeplace(trouvePositionVide(monstres[i].pos));
 					}
 				}
 			}
-			
-			repaint();
 			try {
-				Thread.sleep(1000); //laisse le temps au joueur de voir les deplacements des monstres
+				Thread.sleep(150); //laisse le temps de voir les deplacements des monstres
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public void finTourH(){
-		for(int i=0; i<NB_HEROS; i++){
-			heros[i].setTour(true);
-			//heros[i].couleur = COULEUR_HEROS;
-			elements[heros[i].getPosition().getX()][heros[i].getPosition().getY()].couleur = COULEUR_HEROS;
-		}
-		tourMonstre();
-		System.out.println("tada");
 	}
 }
