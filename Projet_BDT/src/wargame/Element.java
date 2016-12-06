@@ -19,6 +19,11 @@ public class Element implements IConfig{
 		this.pos=pos;
 	}
 	public void setPosition(Position position){
+		Position tmp = pos;
+		Element ancien = carte.getElement(tmp);
+		Element nouveau = carte.getElement(position);
+		carte.setElement(nouveau, tmp);
+		carte.setElement(ancien, position);
 		pos=position;
 	}
 	public Position getPosition(){
