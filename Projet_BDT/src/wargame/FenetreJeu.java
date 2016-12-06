@@ -1,10 +1,18 @@
 package wargame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,14 +21,18 @@ import javax.swing.JPanel;
 
 import wargame.PanneauJeu;
 
-public class FenetreJeu  implements IConfig {
+public class FenetreJeu  implements IConfig, Serializable {
+	
+	/** Numéro pour la sérialisation */
+	private static final long serialVersionUID = -5467387977868744289L;
 	public static int abs=0;
 	public static int ord=0;
 	private static Boolean soldatSelectionne=false;
 	private static Position curseur1;
+	private static JFrame frame;
 	public static void main(String[] args){
 		
-		JFrame frame = new JFrame("Wargame");
+		frame = new JFrame("Wargame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		PanneauJeu panneauJeu = new PanneauJeu();
@@ -29,7 +41,66 @@ public class FenetreJeu  implements IConfig {
 		
 		JButton finDuTour=new JButton("Fin du tour");
 		JLabel encoreEnVie=new JLabel("Il reste "+panneauJeu.nbSoldats());
+
+		/**
+		 * Bouton pour la sauvegarde de la partie en cours.
+		 */
+		JButton sauvegarde = new JButton("Sauvegarder partie");
+		sauvegarde.addActionListener(new ActionListener() {
+			
+			/**
+			 * Effectue la sauvegarde de la partie au clic sur le bouton.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Sauvegarde de la partie...");
+				FileOutputStream f;
+				try {
+					f = new FileOutputStream("wargame.ser");
+					ObjectOutputStream oos = new ObjectOutputStream(f);
+					oos.writeObject(frame);
+					oos.flush();
+					oos.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		/**
+		 * Bouton pour reprendre la dernière partie sauvegardée.
+		 */
+		JButton restaurer = new JButton("Restaurer partie");
+		restaurer.addActionListener(new ActionListener() {
+			
+			/**
+			 * Effectue la restauration de la dernière partie sauvegardée
+			 * au clic sur le bouton
+			 */
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Reprise de la partie...");
+				FileInputStream fInPut;
+				try {
+					fInPut = new FileInputStream("wargame.ser");
+					ObjectInputStream ois = new ObjectInputStream(fInPut);
+					final JFrame savedFrame = (JFrame) ois.readObject();
+					frame = savedFrame;
+					ois.close();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
+		infosTop.add(sauvegarde);
+		infosTop.add(restaurer);
 		infosTop.add(finDuTour);
 		infosTop.add(encoreEnVie);
 		
@@ -67,22 +138,18 @@ public class FenetreJeu  implements IConfig {
 		})	;
 		
 		infosTop.setOpaque(true);
-		infosTop.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,2*NB_PIX_CASE));
+		infosTop.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,3*NB_PIX_CASE));
 		infosTop.setBackground(COULEUR_VIDE);
 		infosBot.setOpaque(true);
 		infosBot.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,1*NB_PIX_CASE));
 		infosBot.setBackground(COULEUR_VIDE);
 		panneauJeu.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE+1,1+HAUTEUR_CARTE*NB_PIX_CASE));
 		frame.getContentPane().add(panneauJeu,BorderLayout.CENTER);
-
 		frame.getContentPane().add(infosTop,BorderLayout.NORTH);
 		frame.getContentPane().add(infosBot,BorderLayout.SOUTH);
-
 
 		frame.setLocation(POSITION_X, POSITION_Y);
 		frame.pack();
 		frame.setVisible(true);
-		
-		
 	}
 }

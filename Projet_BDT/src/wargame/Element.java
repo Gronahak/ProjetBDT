@@ -2,9 +2,11 @@ package wargame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Element implements IConfig{
+public class Element implements IConfig, Serializable{
 
+	private static final long serialVersionUID = -6903291678115693478L;
 	protected Position pos;
 	protected Color couleur;;
 	protected Boolean estVisible=false;

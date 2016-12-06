@@ -1,5 +1,7 @@
 package wargame;
 
+import java.io.Serializable;
+
 import wargame.ISoldat.TypesM;
 
 /**
@@ -8,7 +10,9 @@ import wargame.ISoldat.TypesM;
  * @version 15/11/16
  */
 
-public class Heros extends Soldat{
+public class Heros extends Soldat implements Serializable{
+	
+	private static final long serialVersionUID = 3091848576556121166L;
 	private TypesH TYPE;
 
 	public Heros(Carte carte,TypesH type,String nom,Position pos){

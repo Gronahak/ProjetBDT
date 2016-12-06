@@ -1,11 +1,13 @@
 package wargame;
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
 
-public class PanneauJeu extends JPanel implements IConfig {
-
+public class PanneauJeu extends JPanel implements IConfig, Serializable {
 	
-	private static final long serialVersionUID = 1L;
+	/** Numéro de sérialisation */
+	private static final long serialVersionUID = 9136903518084884716L;
 	Carte carte;
 
 	PanneauJeu(){

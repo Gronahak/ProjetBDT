@@ -1,10 +1,13 @@
 package wargame;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 
-public class Carte extends JPanel implements ICarte, IConfig {
+public class Carte extends JPanel implements ICarte, IConfig, Serializable {
+	private static final long serialVersionUID = 8480003379870866268L;
+	
 	private Element[][] elements;
 	private Heros[] heros;
 	private Monstre[] monstres ;
