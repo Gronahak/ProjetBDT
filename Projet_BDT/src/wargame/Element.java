@@ -44,9 +44,6 @@ public class Element implements IConfig, Serializable{
 
 	}
 	public String toString(){
-		//return "Je dessine un "+this.getClass().getSimpleName()+" en case "+pos;
 		return "";
 	}
-	
-
 }

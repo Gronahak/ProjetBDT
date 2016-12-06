@@ -12,7 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,18 +20,15 @@ import javax.swing.JPanel;
 
 import wargame.PanneauJeu;
 
-public class FenetreJeu  implements IConfig, Serializable {
+public class FenetreJeu  implements IConfig {
 	
-	/** Numéro pour la sérialisation */
-	private static final long serialVersionUID = -5467387977868744289L;
 	public static int abs=0;
 	public static int ord=0;
 	private static Boolean soldatSelectionne=false;
 	private static Position curseur1;
-	private static JFrame frame;
 	public static void main(String[] args){
 		
-		frame = new JFrame("Wargame");
+		JFrame frame = new JFrame("Wargame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		PanneauJeu panneauJeu = new PanneauJeu();
@@ -57,7 +53,7 @@ public class FenetreJeu  implements IConfig, Serializable {
 				try {
 					f = new FileOutputStream("wargame.ser");
 					ObjectOutputStream oos = new ObjectOutputStream(f);
-					oos.writeObject(frame);
+					oos.writeObject(panneauJeu.getCarte());
 					oos.flush();
 					oos.close();
 				} catch (FileNotFoundException e1) {
@@ -83,17 +79,15 @@ public class FenetreJeu  implements IConfig, Serializable {
 				try {
 					fInPut = new FileInputStream("wargame.ser");
 					ObjectInputStream ois = new ObjectInputStream(fInPut);
-					final JFrame savedFrame = (JFrame) ois.readObject();
-					frame = savedFrame;
+					final Carte savedMap = (Carte) ois.readObject();
+					panneauJeu.setCarte(savedMap);
+					panneauJeu.repaint();
 					ois.close();
 				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -121,19 +115,19 @@ public class FenetreJeu  implements IConfig, Serializable {
 				curseur1=new Position(abs,ord);
 				if (panneauJeu.carte.getElement(curseur1) instanceof Heros){
 					soldatSelectionne=true;
+					System.out.println("coucou");
 				}
 			}
 			public void mouseReleased(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
 				ord=e.getY()/NB_PIX_CASE;
-				Position curseur=new Position(abs,ord);
+				Position curseur = new Position(abs,ord);
 				if (soldatSelectionne==true){
-					
 						panneauJeu.carte.actionHeros(curseur1, curseur);
 						soldatSelectionne=false;
+						System.out.println("coucou2");
 						panneauJeu.repaint();
 				}
-
 			}
 		})	;
 		

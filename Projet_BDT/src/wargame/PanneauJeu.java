@@ -11,26 +11,29 @@ public class PanneauJeu extends JPanel implements IConfig, Serializable {
 	Carte carte;
 
 	PanneauJeu(){
-		carte=new Carte();
-	//	this.setOpaque(true);
-	//	this.setBackground(Color.GRAY); 
+		carte = new Carte();
 		this.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,HAUTEUR_CARTE*NB_PIX_CASE));
-
-		
-	//	this.add(testcarte);
-	//testcarte.toutDessiner(this.getGraphics());
-
 	}
+		
 	public void paintComponent(Graphics g){
-
 		super.paintComponent(g);
 		carte.toutDessiner(g);
-
 	}
+	
 	public String getInfos(Position pos){
 		return carte.getElement(pos).toString();
 	}
+	
 	public String nbSoldats(){
 		return carte.nombreSoldatsRestant();
+	}
+	
+	public Carte getCarte(){
+		Carte c = this.carte;
+		return c;
+	}
+	
+	public void setCarte(Carte newCarte){
+		this.carte = newCarte;
 	}
 }
