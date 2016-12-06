@@ -127,7 +127,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	public boolean deplaceSoldat(Position pos, Soldat soldat) {
 		if (pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
 			elements[soldat.pos.getX()][soldat.pos.getY()]=new Element(soldat.pos);
-			System.out.println("1 "+elements[soldat.pos.getX()][soldat.pos.getY()]+"\n2 "+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+"\n3 "+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
+			System.out.println(elements[soldat.pos.getX()][soldat.pos.getY()]+""+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+""+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
 
 			//System.out.println("1\t"+soldat.getPosition());
 			System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
@@ -259,6 +259,8 @@ public class Carte extends JPanel implements ICarte, IConfig {
 					}
 				}
 			}
+			
+			repaint();
 			try {
 				Thread.sleep(150); //laisse le temps de voir les deplacements des monstres
 			} catch (InterruptedException e) {
