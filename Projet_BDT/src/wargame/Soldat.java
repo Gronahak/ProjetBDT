@@ -22,6 +22,11 @@ public  class Soldat  extends Element implements ISoldat  {
 	}
 	
 	public void setTour(boolean bool){
+		if(bool){
+			couleur = COULEUR_HEROS;
+		}else{
+			couleur = COULEUR_HEROS_DEJA_JOUE;
+		}
 		tour = bool;
 	}
 	
@@ -79,13 +84,12 @@ public  class Soldat  extends Element implements ISoldat  {
 	public void seDeplace(Position newPos){
 		System.out.println("position "+pos);
 		if (newPos.estValide()&&carte.estVide(newPos)) {
+//			Element ancien = carte.getElement(pos);
+//			Element nouveau = carte.getElement(newPos);
+//			carte.setElement(nouveau, pos);
+//			carte.setElement(ancien, newPos);
 			this.setPosition(newPos);
 			System.out.println("Soldat seDeplace" + pos);
-			Element ancien = carte.getElement(pos);
-			Element nouveau = carte.getElement(newPos);
-			carte.setElement(nouveau, pos);
-			carte.setElement(ancien, newPos);
-			System.out.println("print  de merde");
 		}
 	}
 
