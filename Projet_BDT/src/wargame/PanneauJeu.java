@@ -3,7 +3,6 @@ import java.awt.*;
 import java.io.Serializable;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 
 public class PanneauJeu extends JPanel implements IConfig , Serializable{
 
@@ -17,7 +16,7 @@ public class PanneauJeu extends JPanel implements IConfig , Serializable{
 	//	this.setOpaque(true);
 		this.setBackground(Color.cyan); 
 		this.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,HAUTEUR_CARTE*NB_PIX_CASE));
-	 setBorder (new LineBorder(Color.blue)); 
+	 //setBorder (new LineBorder(Color.blue)); 
 
 		//this.add(vieArmeeHeros,BorderLayout.WEST);
 		//this.add(carte,BorderLayout.CENTER);

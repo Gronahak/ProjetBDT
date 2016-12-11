@@ -16,7 +16,7 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 	
 	
 	private Heros[] heros; /* Obsolète maintenant qu'on utilise les HashSets*/
-	private Monstre[] monstres ; /* idem */ 
+//	private Monstre[] monstres ; /* idem */ 
 
 	public static HashSet<Heros> hsHeros; /* Ces deux HashSet permettent de retrouver plu facilement les héros et les monstres ( sans avoir à parcourir l'intégralité des Éléments de la carte */
 	public static HashSet<Monstre> hsMonstres;
@@ -173,6 +173,7 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 
 		elements[perso.getPosition().getX()][perso.getPosition().getY()]=new Element(new Position(perso.getPosition().getX(),perso.getPosition().getY()));
 		hsHeros.remove(perso);
+		repaint();
 		hsMonstres.remove(perso);
 		actualiserChampDeVision();
 		FenetreJeu.encoreEnVie.setText("Il reste "+nombreSoldatsRestant());
@@ -267,14 +268,31 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 			}
 		}
 	}
-	private void tourMonstres(){
+
+	private void tourMonstres() {
 		Object[] monstres = hsMonstres.toArray();
-		for(Object o : monstres){
-			Position deplacement = new Position();
-			deplacement =trouvePositionVide(((Element) o).getPosition());
-			elements[((Element) o).getPosition().getX()][((Element) o).getPosition().getY()].setEstVide(true);
-			deplaceSoldat(deplacement,(Soldat) o);
+		Object[] heros = hsHeros.toArray();
+		boolean combattu;
+		for (Object o : monstres) {
+			combattu = false;
+			for (Object o2 : heros) {
+				if (((Soldat) o).estAPortee((Soldat) o2)) {
+					((Soldat) o).combat((Soldat) o2);
+					combattu = true;
+					break;
+				}
+			}
+			if (combattu == false) {
+
+				Position deplacement = new Position();
+				deplacement = trouvePositionVide(((Element) o).getPosition());
+				elements[((Element) o).getPosition().getX()][((Element) o).getPosition().getY()].setEstVide(true);
+				deplaceSoldat(deplacement, (Soldat) o);
+
+			}
+
 		}
+
 		repaint();
 
 	}

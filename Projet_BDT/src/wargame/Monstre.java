@@ -12,13 +12,10 @@ public class Monstre  extends Soldat implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-//	private TypesM TYPE;
 	public Monstre(Carte carte,TypesM type,char ident,String nom,Position pos){
 	 super(carte,type,nom,pos);
-	// TYPE=type;
 		couleur=COULEUR_MONSTRES;
 		identifiant=""+('A'-ident);
-		System.out.println("BHDBHBDHZBDHZBHDBZHDBZHDBZHBDHZBDHZB"+('A'-ident));
 	}
 
 }

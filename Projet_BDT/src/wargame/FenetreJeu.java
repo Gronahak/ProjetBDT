@@ -1,7 +1,6 @@
 package wargame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 //import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -19,15 +18,16 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
-
 import wargame.PanneauJeu;
 
 public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static int abs=0;
 	public static int ord=0;
 	public static JLabel encoreEnVie;
@@ -42,9 +42,9 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		JPanel infosTop = new JPanel();
-		JLabel infosBot = new JLabel("vide");
+		 final JLabel infosBot = new JLabel("vide");
 	
-		((JComponent) frame.getContentPane()).setBorder (new LineBorder(Color.green)); 
+//		((JComponent) frame.getContentPane()).setBorder (new LineBorder(Color.green)); 
 
 		vieArmeeHeros = new JaugeVie();
 		vieArmeeMonstres = new JaugeVie();
@@ -65,23 +65,18 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 		finDuTour.addKeyListener (new KeyListener() {
 		
 			
-			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 			
-			@Override
 			public void keyPressed(KeyEvent e) {
-			//	System.out.println(""+e.getKeyCode());
 				if (e.getKeyCode()!=32);
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -216,11 +211,5 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 		frame.setVisible(true);
 		
 	}
-	/*
-	public void paintComponent(Graphics g){
 
-		super.paintComponent(g);
-	//	vieArmeeHeros.seDessiner(g);
-	//	vieArmeeMonstres.seDessiner(g);
-	}*/
 }

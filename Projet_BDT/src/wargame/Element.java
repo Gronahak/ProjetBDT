@@ -39,7 +39,6 @@ public class Element implements IConfig , Serializable{
 		return couleur;
 	}
 	public boolean estVide(){
-		//return (couleur==COULEUR_VIDE);
 		return estVide;
 	}
 	
@@ -63,7 +62,6 @@ public class Element implements IConfig , Serializable{
 
 	}
 	public String toString(){
-		//return "Je dessine un "+this.getClass().getSimpleName()+" en case "+pos;
 		return "";
 	}
 	
