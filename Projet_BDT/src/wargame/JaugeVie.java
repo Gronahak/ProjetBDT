@@ -39,7 +39,22 @@ public class JaugeVie extends JPanel implements IConfig{
 	
 	}
 
-	
+	public void refresh (){
+		Object[] heros = Carte.hsHeros.toArray();
+int sommeHp=0;
+		for (final Object h:heros){
+			System.out.println("HeeeeermmmmmmHermrmmmmm"+sommeHp);
+			sommeHp+=((Soldat)h).getPointsVieActuels();
+		}
+		FenetreJeu.vieArmeeHeros.setHpCourants(sommeHp);
+		Object[] monstre = Carte.hsMonstres.toArray();
+		sommeHp=0;
+				for (final Object m:monstre){
+					sommeHp+=((Soldat)m).getPointsVieActuels();
+				}
+		FenetreJeu.vieArmeeMonstres.setHpCourants(sommeHp);
+
+	}
 	public void paintComponent(Graphics g){
 
 		super.paintComponent(g);

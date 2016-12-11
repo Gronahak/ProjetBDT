@@ -13,7 +13,7 @@ public class PanneauJeu extends JPanel implements IConfig {
 		carte=new Carte();
 		
 	//	this.setOpaque(true);
-	//	this.setBackground(Color.GRAY); 
+		this.setBackground(Color.cyan); 
 		this.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,HAUTEUR_CARTE*NB_PIX_CASE));
 	 setBorder (new LineBorder(Color.blue)); 
 

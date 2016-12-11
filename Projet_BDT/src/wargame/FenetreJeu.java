@@ -47,8 +47,7 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 		JButton finDuTour=new JButton("Fin du tour");
 		finDuTour.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				panneauJeu.carte.finTourH();
-				panneauJeu.carte.tourMonstre();
+				panneauJeu.carte.jouerSoldats(panneauJeu);
 				panneauJeu.repaint();
 			}
 		});

@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Carte extends JPanel implements ICarte, IConfig {
-	private Element[][] elements;
+	protected Element[][] elements;
 	private Heros[] heros;
 	private Monstre[] monstres ;
 	public static HashSet hsHeros;
@@ -42,22 +42,30 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		}
 		*/
 		hsHeros=new HashSet();
+		char id='A';
 		int sommeHP=0,soldatHP=0;
 		for (i = 0; i < NB_HEROS; i++) {
-			Heros h = new Heros(this,ISoldat.TypesH.getTypeHAlea(),"Y",trouvePositionVide(GAUCHE));
-			//System.out.println(h.getPoints());
+			Heros h = new Heros(this,ISoldat.TypesH.getTypeHAlea(),id,"Y",trouvePositionVide(GAUCHE));
+			System.out.println("Caractère "+i+ " : "+id);
+			id++;
+
 			soldatHP=h.getPoints();
 			FenetreJeu.vieArmeeHeros.addHp(soldatHP);
 			sommeHP+=soldatHP;
 			hsHeros.add(h);
 			elements[h.getPosition().getX()][h.getPosition().getY()] = h;
 		}
+		id='1';
 		FenetreJeu.vieArmeeHeros.setHp(sommeHP);
 		sommeHP=0;
 		soldatHP=0;
 		hsMonstres=new HashSet();
 		for (i = 0; i < NB_MONSTRES; i++) {
-			Monstre m = new Monstre(this,ISoldat.TypesM.getTypeMAlea(),"Y",trouvePositionVide(DROITE));
+			System.out.println("Caractère "+i+ " : "+(id+i));
+
+			Monstre m = new Monstre(this,ISoldat.TypesM.getTypeMAlea(),id,"Y",trouvePositionVide(DROITE));
+	//		System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"+m.estVide());
+id++;
 			soldatHP=m.getPoints();
 
 			FenetreJeu.vieArmeeMonstres.addHp(soldatHP);
@@ -109,7 +117,8 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			resultatX = pos.getX() + dx;
 			resultatY = pos.getY() + dy;
 			resultat = new Position(resultatX, resultatY);
-		} while (elements[resultatX][resultatY] != null && resultat.estValide());
+			System.out.println("jjjjj"+resultat);
+		} while (!(resultat.estValide() && elements[resultatX][resultatY].estVide   ));
 		return elements[resultatX][resultatY].getPosition();
 	}
 
@@ -144,17 +153,19 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	}
 
 	public boolean deplaceSoldat(Position pos, Soldat soldat) {
-		if (pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
-			elements[soldat.pos.getX()][soldat.pos.getY()]=new Element(soldat.pos);
+		if (pos.estVoisine(soldat.pos) && pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
+			elements[soldat.pos.getX()][soldat.pos.getY()]=/*soldat;*/new Element(soldat.pos);
 			System.out.println(elements[soldat.pos.getX()][soldat.pos.getY()]+""+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+""+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
 
 			//System.out.println("1\t"+soldat.getPosition());
 		//	System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
 //System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][pos.getY()].couleur);
 			soldat.seDeplace(pos);
+			elements[pos.getX()][pos.getY()].setEstVide(false);;
+			
 	//		System.out.println("WTF2 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
 			
-			elements[pos.getX()][pos.getY()]=soldat;
+		//	elements[pos.getX()][pos.getY()]=soldat;
 		//	System.out.println("WTF3 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
 			
 //((Soldat)elements[pos.getX()][pos.getY()]).seDeplace(pos);
@@ -173,28 +184,29 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		hsMonstres.remove(perso);
 		/* utiliser tables de hash, au moins pour les 2 tableaux monstres et héros et virer le soldat du tableau le cas échéant quand il meurt pour perdre la vision autour du-dit soldat*/
 		actualiserChampDeVision();
-	//	PanneauJeu pj=(PanneauJeu) getParent();
 		FenetreJeu.encoreEnVie.setText("Il reste "+nombreSoldatsRestant());
 
 	}
 
 	public boolean actionHeros(Position pos, Position pos2) {
-		if (hsHeros.contains(elements[pos.getX()][pos.getY()])) System.out.println("HHHHHHOH");
-		else System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiOH");
+		//if (hsHeros.contains(elements[pos.getX()][pos.getY()])) System.out.println("HHHHHHOH");
+		//else System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiOH");
 		Iterator iterateurHeros = hsHeros.iterator();
 		while(iterateurHeros.hasNext()){
 		     // System.out.println(iterateurHeros.next());
 		    Object her=iterateurHeros.next();
-		    System.out.println("itemgle: "+her);
+		 //   System.out.println("itemgle: "+her);
 			 
-		    if (her==elements[pos.getX()][pos.getY()])System.out.println("mouiii");else System.out.println("mmnooooon");
+		   // if (her==elements[pos.getX()][pos.getY()])System.out.println("mouiii");else System.out.println("mmnooooon");
 		}
 		if (!(elements[pos.getX()][pos.getY()] instanceof Heros)){
 			return false;
 		}
-		if (elements[pos2.getX()][pos2.getY()].estVide()) {
+		if (elements[pos.getX()][pos.getY()].getCouleur()==COULEUR_HEROS_DEJA_JOUE)return false;
+		if (elements[pos2.getX()][pos2.getY()].estVide()&&pos2.estVoisine(pos)) {
 
 			deplaceSoldat(pos2,(Soldat) elements[pos.getX()][pos.getY()]);
+			elements[pos2.getX()][pos2.getY()].setCouleur(COULEUR_HEROS_DEJA_JOUE);
 			return true;
 
 		}
@@ -203,6 +215,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 				&& (((Soldat)elements[pos.getX()][pos.getY()]).estAPortee((Monstre)elements[pos2.getX()][pos2.getY()]))
 				){
 			((Soldat)elements[pos.getX()][pos.getY()]).combat((Soldat)elements[pos2.getX()][pos2.getY()]);
+			elements[pos.getX()][pos.getY()].setCouleur(COULEUR_HEROS_DEJA_JOUE);
 			return true;
 
 		}
@@ -211,6 +224,23 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	}
 
 	public void jouerSoldats(PanneauJeu pj) {
+		Iterator iterateurHeros = hsHeros.iterator();
+		while(iterateurHeros.hasNext()){
+		    Object herosN=iterateurHeros.next();
+		    if (((Element )herosN).getCouleur()!=COULEUR_HEROS_DEJA_JOUE){
+		    ((Heros) herosN).seReposer();
+		    }
+		}
+		repaint();
+		tourMonstres();
+		iterateurHeros = hsHeros.iterator();
+		while(iterateurHeros.hasNext()){
+		    Object herosN=iterateurHeros.next();
+		    ((Element)herosN).setCouleur(COULEUR_HEROS);
+		    System.out.println("AHUDIZHUDIZHUIDHZAUIPDH ZAUIPFHZAUPHDAUZIP HZUPDHZAUIFP ZHAUIFP ZUIFP ZAUIDP ZAHUFIP ZEHFUZIP FUIZEP FHUIZPHFUIZPHF UIZPHFUE PHFEUP");
+		    
+		}
+		    
 	}
 
 	public void toutDessiner(Graphics g) {
@@ -218,11 +248,14 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		int i, j;
 
 		actualiserChampDeVision();
-		for (i = 0; i < LARGEUR_CARTE; i++)
-			for (j = 0; j < HAUTEUR_CARTE; j++) {
-	//			System.out.println("("+i+" "+j+"(");
+		for (j = 0; j < HAUTEUR_CARTE; j++) {
+			for (i = 0; i < LARGEUR_CARTE; i++){
+			
+				System.out.print(""+(elements[i][j].estVide?'t':'f'));
 				elements[i][j].seDessiner(g);
 				}
+		System.out.println("");
+		}
 		System.out.println("______________________");
 
 		Object[] heros = hsHeros.toArray();
@@ -256,7 +289,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			for(l=0;l<HAUTEUR_CARTE;l++)
 				elements[k][l].estVisible=false;
 		//Heros[] heross=(Heros[])heros;
-		for (final Object h:heros){
+		for (Object h:heros){
 			int porteeVisuelle=((Soldat) h).getPortee();
 			Position positionTmp=new Position(0,0);
 			for (int i=((Element) h).getPosition().getX()-porteeVisuelle;i<=((Element) h).getPosition().getX()+porteeVisuelle;i++){
@@ -271,5 +304,34 @@ public class Carte extends JPanel implements ICarte, IConfig {
 				
 			}
 		}
+	}
+	/*
+	private void tourMonstres(){
+		Object[] monstres = hsMonstres.toArray();
+		for(Object o : monstres){
+			Position deplacement = new Position();
+			System.out.println("jj"+((Element) o).getPosition());
+
+			deplacement =trouvePositionVide(((Element) o).getPosition());
+
+			deplaceSoldat(deplacement,(Soldat) o);
+			
+		}
+
+	}
+
+	*/
+	private void tourMonstres(){
+		Object[] monstres = hsMonstres.toArray();
+		for(Object o : monstres){
+			Position deplacement = new Position();
+			System.out.println("jj"+((Element) o).getPosition());
+
+			deplacement =trouvePositionVide(((Element) o).getPosition());
+			elements[((Element) o).getPosition().getX()][((Element) o).getPosition().getY()].setEstVide(true);
+			deplaceSoldat(deplacement,(Soldat) o);
+		}
+		repaint();
+
 	}
 }

@@ -1,5 +1,8 @@
 package wargame;
 
+import java.awt.Font;
+import java.awt.Graphics;
+
 /**
  * Classe Soldat (Heros et Monstres)
  * @author emilie
@@ -12,7 +15,7 @@ public  class Soldat  extends Element implements ISoldat  {
 	private final int puissance;
 	private final String nom;
 	private final String race;
-
+	protected char identifiant;
 	private int pointsVieActuels;
 	
 
@@ -26,6 +29,7 @@ public  class Soldat  extends Element implements ISoldat  {
 		this.nom=nom;
 		this.race=type.name();
 		setCarte(carte);
+		estVide=false;
 	}
 	public Soldat(Carte carte,TypesH type,String nom,Position pos){
 		super(pos);
@@ -36,6 +40,8 @@ public  class Soldat  extends Element implements ISoldat  {
 		puissance = type.getPuissance();
 		this.nom=nom;
 		this.race=type.name();
+		estVide=false;
+		setCarte(carte);
 
 	}
 	
@@ -109,6 +115,7 @@ public  class Soldat  extends Element implements ISoldat  {
 				}
 			}
 		}
+		/*
 		Object[] heros = Carte.hsHeros.toArray();
 int sommeHp=0;
 		for (final Object h:heros){
@@ -122,16 +129,21 @@ int sommeHp=0;
 					sommeHp+=((Soldat)m).getPointsVieActuels();
 				}
 		FenetreJeu.vieArmeeMonstres.setHpCourants(sommeHp);
-
+*/
+		FenetreJeu.vieArmeeMonstres.refresh();
+		FenetreJeu.vieArmeeHeros.refresh();
 		FenetreJeu.vieArmeeMonstres.repaint();
 		FenetreJeu.vieArmeeHeros.repaint();
 	}
 
 	public void seDeplace(Position newPos){
 		if (newPos.estValide()&&carte.estVide(newPos)) {
+			carte.elements[pos.getX()][pos.getY()].setEstVide(true);
 			this.setPosition(newPos);
+			carte.elements[pos.getX()][pos.getY()]=this;
+			carte.elements[pos.getX()][pos.getY()].setEstVide(false);
 		
-			System.out.println("Soldat seDeplace" + pos);
+//			System.out.println("Soldat seDeplace" + pos);
 		}
 	}
 
@@ -158,6 +170,11 @@ int sommeHp=0;
 		if (pointsVieActuels<0)pointsVieActuels=0;
 			
 	}
+	public void augmentererPointsVieActuels(int pv){
+		pointsVieActuels+=pv;
+		if (pointsVieActuels>pointsVieMax)pointsVieActuels=pointsVieMax;
+			
+	}
 	public String toString(){
 		return " "+race+" "+nom+" (" + pointsVieActuels + "PV/" + pointsVieMax + ")";
 	}
@@ -166,4 +183,18 @@ int sommeHp=0;
 		if (this.pos.distanceX(ennemi.pos)<=this.getPortee()&&this.pos.distanceY(ennemi.pos)<=this.getPortee()) return true;
 		return false;
 	}
+	public void seDessiner(Graphics g) {
+		super.seDessiner(g);
+		//tdm[0]=identifiant;
+		System.out.println("dddddddddddddd"+identifiant);
+		g.setColor(COULEUR_EAU);
+		Font police=new Font("Arial",7, 28);
+		g.setFont(police);
+		g.setColor(COULEUR_EAU);
+		if (this.estVisible)g.drawString(""+identifiant, pos.getX()*NB_PIX_CASE, NB_PIX_CASE*2/3+pos.getY()*NB_PIX_CASE);
+		//g.drawRect(pos.getX()*NB_PIX_CASE, pos.getY()*NB_PIX_CASE, NB_PIX_CASE, NB_PIX_CASE);
+
+	}
+
+		
 }

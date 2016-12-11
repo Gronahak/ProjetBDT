@@ -8,11 +8,12 @@ package wargame;
  */
 public class Monstre  extends Soldat{
 	private TypesM TYPE;
-	
-	public Monstre(Carte carte,TypesM type,String nom,Position pos){
+	public Monstre(Carte carte,TypesM type,char ident,String nom,Position pos){
 	 super(carte,type,nom,pos);
 	 TYPE=type;
 		couleur=COULEUR_MONSTRES;
+		identifiant=ident;
+		System.out.println("BHDBHBDHZBDHZBHDBZHDBZHDBZHBDHZBDHZB"+ident);
 	}
 
 }

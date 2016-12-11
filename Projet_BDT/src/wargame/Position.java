@@ -4,6 +4,9 @@ public class Position implements IConfig {
 	Position(int x, int y) { 
 		this.x = x; this.y = y;
 	}
+	Position(){
+		this(0,0);
+	}
 	public int getX() { 
 		return x; 
 	}

@@ -16,6 +16,7 @@ public class Obstacle extends Element implements IConfig{
 	Obstacle(TypeObstacle type, Position pos) { 
 		TYPE = type; this.pos = pos;
 		couleur=TYPE.COULEUR;
+		estVide=false;
 	}
 	public String toString() {
 		return ""+TYPE;
