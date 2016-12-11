@@ -2,21 +2,21 @@ package wargame;
 
 import java.io.Serializable;
 
-//import wargame.ISoldat.TypesM;
-
 /**
- * Classe Heros
- * @author emilie
- * @version 15/11/16
+ * Classe heros
+ * @author Emilie, Hugo, Rémy
+ * @version 11-11-2016
  */
 
 public class Heros extends Soldat implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	//private TypesH TYPE;
 
+
+	private static final long serialVersionUID = 1L;
+	
+	/*****************
+	 * Constructeurs *
+	 *****************/
+	
 	public Heros(Carte carte,TypesH type,char ident,String nom,Position pos){
 		super(carte,type,nom,pos);
 		//TYPE=type;
@@ -24,13 +24,13 @@ public class Heros extends Soldat implements Serializable{
 		identifiant=""+ident;
 	}
 	
+	/**
+	 * Gestion "repos" des heros
+	 */
 	public void seReposer(){
 		this.augmentererPointsVieActuels(1);
 		this.setCouleur(COULEUR_HEROS_DEJA_JOUE);
 		FenetreJeu.vieArmeeHeros.refresh();
 		FenetreJeu.vieArmeeHeros.repaint();
-		
 	}
-	
-	
 }

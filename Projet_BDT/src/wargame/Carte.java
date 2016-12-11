@@ -5,16 +5,19 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 
-//import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * Classe carte
+ * @author Emilie, Hugo, Rémy
+ * @version 11-11-2016
+ */
+
 public class Carte extends JPanel implements ICarte, IConfig , Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	protected Element[][] elements; /* C'est ce tableau d'éléments qui constitue la carte à proprement parler */
-	
-	
-	
+
 	private Heros[] heros; /* Obsolète maintenant qu'on utilise les HashSets*/
 	private Monstre[] monstres ; /* idem */ 
 
@@ -23,25 +26,21 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 	private Obstacle[] obstacles;
 	Carte() {
 		int i, j;
-		/****************************************************************************/
-		/*																			*/
-		/*								Initialisation								*/
-		/*																			*/
-		/****************************************************************************/
-		
-		
+
+		/******************
+		 * Initialisation *		
+		 ******************/
+
 		elements = new Element[LARGEUR_CARTE][HAUTEUR_CARTE];
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
 				elements[i][j] = new Element(new Position(i, j));
 			}
-		
 
-		/****************************************************************************/
-		/*																			*/
-		/*								Ajout des héros 							*/
-		/*																			*/
-		/****************************************************************************/
+		/*******************
+		 * Ajout des heros *
+		 *******************/
+
 		hsHeros=new HashSet<Heros>();
 		char id='A';
 		int sommeHP=0,soldatHP=0; /* Ces 2 variables servent à initialiser la jauge de l'armée des Gentils ( à gauche )*/
@@ -56,13 +55,11 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		}
 		id='1';
 		FenetreJeu.vieArmeeHeros.setHp(sommeHP);
-		
 
-		/****************************************************************************/
-		/*																			*/
-		/*								Ajout des monstres 							*/
-		/*																			*/
-		/****************************************************************************/
+		/**********************
+		 * Ajout des monstres *
+		 **********************/
+
 		sommeHP=0;
 		soldatHP=0;
 		hsMonstres=new HashSet<Monstre>();
@@ -77,26 +74,30 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		}			
 		FenetreJeu.vieArmeeMonstres.setHp(sommeHP);
 
+		/***********************
+		 * Ajout des obstacles *
+		 ***********************/
 
-		/****************************************************************************/
-		/*																			*/
-		/*								Ajout des obstacles							*/
-		/*																			*/
-		/****************************************************************************/
 		obstacles= new Obstacle[NB_OBSTACLES];
 		for (i = 0; i < NB_OBSTACLES; i++) {
 			obstacles[i] = new Obstacle(Obstacle.TypeObstacle.getObstacleAlea(),trouvePositionVide(TOUTE));
-			
 			elements[obstacles[i].getPosition().getX()][obstacles[i].getPosition().getY()] = obstacles[i];
-
 		}
 	}
 
+	/**
+	 * Recuperer un element sur une position
+	 * @param pos
+	 */
 	public Element getElement(Position pos) { // Retourne l'element du tableau à la position <pos>
 		return elements[pos.getX()][pos.getY()];
 	}
 
-	public Position trouvePositionVide(int zone) { // Trouve aléatoirement une position vide sur la carte dans la <zone> spécifiée (Gauche, Droite, ou toute la carte)
+	/**
+	 * Trouver une position vide selon une zone
+	 * @param zone gauche, droite
+	 */
+	public Position trouvePositionVide(int zone) {
 		int x, y, delta=2,decalage=0;
 		if (zone==GAUCHE||zone==DROITE){delta =1;}
 		if (zone==DROITE){decalage=LARGEUR_CARTE/2;}
@@ -106,11 +107,13 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		} while ((elements[x][y] instanceof Soldat) || (elements[x][y] instanceof Obstacle));
 
 		return elements[x][y].pos;
-
 	}
 
-	public Position trouvePositionVide(Position pos) { // Trouve une position vide choisie aléatoirement parmi les 8 positions adjacentes de pos
-
+	/**
+	 * Trouver une position vide autour d'une position
+	 * @param pos
+	 */
+	public Position trouvePositionVide(Position pos) {
 		int dx, dy;
 		int passerTour=0;
 		int resultatX, resultatY;
@@ -126,14 +129,19 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		return elements[resultatX][resultatY].getPosition();
 	}
 
-	public Heros trouveHeros() { // Trouve aléatoirement un héros sur la carte
-		
+	/**
+	 * Trouver un heros sur la carte
+	 */
+	public Heros trouveHeros() {
 		heros=(Heros[]) hsHeros.toArray();
 		return heros[(int) Math.floor(Math.random()) * heros.length];
 	}
 
-	public Heros trouveHeros(Position pos) { // Trouve un héros choisi aléatoirement parmi les 8 positions adjacentes de pos
-
+	/**
+	 * Trouver un heros autour d'une positin
+	 * @param pos
+	 */
+	public Heros trouveHeros(Position pos) {
 		Heros[] listeHerosVoisins = {};
 		Position check = new Position(pos.getX(), pos.getY());
 		int i, j, k = 0;
@@ -145,22 +153,24 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 					continue;
 				if (elements[check.getX()][check.getY()] instanceof Heros)
 					listeHerosVoisins[k++] = (Heros) elements[check.getX()][check.getY()];
-
 			}
 		}
 		if (listeHerosVoisins.length == 0)
 			return null;
 		return listeHerosVoisins[(int) Math.floor(Math.random() * listeHerosVoisins.length)];
-
 	}
 
+	/**
+	 * Deplacer un soldat
+	 * @param pos nouvelle position
+	 * @param soldat soldat a deplacer
+	 */
 	public boolean deplaceSoldat(Position pos, Soldat soldat) {
 		if (pos.estVoisine(soldat.pos) && pos.estValide() && elements[pos.getX()][pos.getY()].estVide()) {
 			elements[soldat.pos.getX()][soldat.pos.getY()]=new Element(soldat.pos);
 
 			soldat.seDeplace(pos);
 			elements[pos.getX()][pos.getY()].setEstVide(false);;
-			
 
 			actualiserChampDeVision();
 			return true;
@@ -168,9 +178,12 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		return false;
 	}
 
+	/**
+	 * Tuer un soldat
+	 * @param perso soldat a tuer
+	 */
 	public void mort(Soldat perso) {
 		elements[perso.getPosition().getX()][perso.getPosition().getY()].setCouleur(COULEUR_VIDE);
-
 		elements[perso.getPosition().getX()][perso.getPosition().getY()]=new Element(new Position(perso.getPosition().getX(),perso.getPosition().getY()));
 		hsHeros.remove(perso);
 		hsMonstres.remove(perso);
@@ -178,49 +191,52 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		FenetreJeu.encoreEnVie.setText("Il reste "+nombreSoldatsRestant());
 	}
 
+	/**
+	 * Gerer les actions d'un heros
+	 */
 	public boolean actionHeros(Position pos, Position pos2) {
 
 		if (!(elements[pos.getX()][pos.getY()] instanceof Heros)){
 			return false;
 		}
-		
-		if (elements[pos.getX()][pos.getY()].getCouleur()==COULEUR_HEROS_DEJA_JOUE)return false;
-		if (elements[pos2.getX()][pos2.getY()].estVide()&&pos2.estVoisine(pos)) {
 
+		if (elements[pos.getX()][pos.getY()].getCouleur()==COULEUR_HEROS_DEJA_JOUE)return false;
+		
+		if (elements[pos2.getX()][pos2.getY()].estVide()&&pos2.estVoisine(pos)) {
 			deplaceSoldat(pos2,(Soldat) elements[pos.getX()][pos.getY()]);
 			elements[pos2.getX()][pos2.getY()].setCouleur(COULEUR_HEROS_DEJA_JOUE);
 			return true;
-
 		}
-
+		
 		else if (elements[pos2.getX()][pos2.getY()] instanceof Monstre
 				&& (((Soldat)elements[pos.getX()][pos.getY()]).estAPortee((Monstre)elements[pos2.getX()][pos2.getY()]))
 				){			elements[pos.getX()][pos.getY()].setCouleur(COULEUR_HEROS_DEJA_JOUE);
 
-			((Soldat)elements[pos.getX()][pos.getY()]).combat((Soldat)elements[pos2.getX()][pos2.getY()]);
-			return true;
-
+				((Soldat)elements[pos.getX()][pos.getY()]).combat((Soldat)elements[pos2.getX()][pos2.getY()]);
+				return true;
 		}
-		
 		return false;
 	}
 
+	/**
+	 * Gerer le tour d'un soldat
+	 */
 	public void jouerSoldats(PanneauJeu pj) {
 		Iterator<Heros> iterateurHeros = hsHeros.iterator();
 		while(iterateurHeros.hasNext()){
-		    Object herosN=iterateurHeros.next();
-		    if (((Element )herosN).getCouleur()!=COULEUR_HEROS_DEJA_JOUE){
-		    ((Heros) herosN).seReposer();
-		    }
+			Object herosN=iterateurHeros.next();
+			if (((Element )herosN).getCouleur()!=COULEUR_HEROS_DEJA_JOUE){
+				((Heros) herosN).seReposer();
+			}
 		}
 		repaint();
 		tourMonstres();
 		iterateurHeros = hsHeros.iterator();
 		while(iterateurHeros.hasNext()){
-		    Object herosN=iterateurHeros.next();
-		    ((Element)herosN).setCouleur(COULEUR_HEROS);		    
+			Object herosN=iterateurHeros.next();
+			((Element)herosN).setCouleur(COULEUR_HEROS);		    
 		}
-		    
+
 	}
 
 	public void toutDessiner(Graphics g) {
@@ -230,9 +246,9 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		actualiserChampDeVision();
 		for (j = 0; j < HAUTEUR_CARTE; j++) {
 			for (i = 0; i < LARGEUR_CARTE; i++){
-			
+
 				elements[i][j].seDessiner(g);
-				}
+			}
 		}
 	}
 
@@ -244,8 +260,8 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 		Object[] heros = hsHeros.toArray();
 		Object[] monstres = hsMonstres.toArray();		
 		return ""+heros.length+" héros et "+monstres.length+" monstres";
-
 	}
+	
 	public void actualiserChampDeVision(){
 		int k,l;
 		Object[] heros = hsHeros.toArray();
@@ -263,10 +279,10 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 					elements[positionTmp.getX()][positionTmp.getY()].estVisible=true;
 					repaint();
 				}
-				
 			}
 		}
 	}
+	
 	private void tourMonstres(){
 		Object[] monstres = hsMonstres.toArray();
 		for(Object o : monstres){
@@ -276,6 +292,5 @@ public class Carte extends JPanel implements ICarte, IConfig , Serializable {
 			deplaceSoldat(deplacement,(Soldat) o);
 		}
 		repaint();
-
 	}
 }
