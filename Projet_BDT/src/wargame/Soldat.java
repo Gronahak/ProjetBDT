@@ -6,13 +6,14 @@ import java.io.Serializable;
 
 /**
  * Classe Soldat (Heros et Monstres)
- * @author emilie
+ * @author emilie 
  * @version 15/11/16
  */
 public  class Soldat  extends Element implements ISoldat, Serializable  {
 	/**
 	 * 
 	 */
+	private int nombreVictimes;
 	private static final long serialVersionUID = 1L;
 	private final int pointsVieMax;
 	private final int portee;
@@ -20,12 +21,13 @@ public  class Soldat  extends Element implements ISoldat, Serializable  {
 	private final int puissance;
 	private final String nom;
 	private final String race;
-	protected char identifiant;
+	protected String identifiant;
 	private int pointsVieActuels;
 	
 
 	public Soldat(Carte carte,TypesM type,String nom,Position pos){
 		super(pos);
+		nombreVictimes=0;
 		pointsVieMax = type.getPoints();
 		pointsVieActuels=pointsVieMax;
 		portee = type.getPortee();
@@ -38,6 +40,7 @@ public  class Soldat  extends Element implements ISoldat, Serializable  {
 	}
 	public Soldat(Carte carte,TypesH type,String nom,Position pos){
 		super(pos);
+		nombreVictimes=0;
 		pointsVieMax = type.getPoints();
 		pointsVieActuels=pointsVieMax;
 		portee = type.getPortee();
@@ -64,78 +67,30 @@ public  class Soldat  extends Element implements ISoldat, Serializable  {
 			forceDeFrappe=(int)Math.floor(Math.random()*this.getPuissance());
 			soldat.diminuerPointsVieActuels(forceDeFrappe);
 			
-			/* Baisser les PV dans les jauges */
-			/*
-			 * if (soldat instanceof Monstre)
-				FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
-			else	 
-				FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
-			
-			FenetreJeu.vieArmeeMonstres.repaint();
-			FenetreJeu.vieArmeeHeros.repaint();
-			*/
-			if (soldat.getPointsVieActuels()<=0) carte.mort(soldat);
+		
+			if (soldat.getPointsVieActuels()<=0) {carte.mort(soldat); this.nombreVictimes++;}
 			else {
 				forceDeFrappe=(int)Math.floor(Math.random()*soldat.getPuissance());
 				this.diminuerPointsVieActuels(forceDeFrappe);
-				/*
-				if (soldat instanceof Monstre)
-					FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
-				else	 
-					FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
-				
-				FenetreJeu.vieArmeeMonstres.repaint();
-				FenetreJeu.vieArmeeHeros.repaint();				
-				*/
-				if (this.getPointsVieActuels()<=0) carte.mort(this);
+			
+				if (this.getPointsVieActuels()<=0) {carte.mort(this); soldat.nombreVictimes++;}
 			}
 		}
 		else {
 			forceDeFrappe=(int)Math.floor(Math.random()*this.getTir());
 			soldat.diminuerPointsVieActuels(forceDeFrappe);
-			/*
-			if (soldat instanceof Monstre)
-				FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
-			else	 
-				FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
-			
-			FenetreJeu.vieArmeeMonstres.repaint();
-			FenetreJeu.vieArmeeHeros.repaint();
-			*/
-			if (soldat.getPointsVieActuels()<=0) carte.mort(soldat);
+	
+			if (soldat.getPointsVieActuels()<=0) {carte.mort(soldat);this.nombreVictimes++;}
 			else {
 				if (soldat.estAPortee(this)){
 					forceDeFrappe=(int)Math.floor(Math.random()*soldat.getTir());
 					this.diminuerPointsVieActuels(forceDeFrappe);
-					/*
-					if (soldat instanceof Monstre)
-						FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
-					else	 
-						FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
-					
-					FenetreJeu.vieArmeeMonstres.repaint();
-					FenetreJeu.vieArmeeHeros.repaint();
-					*/
-					if (this.getPointsVieActuels()<=0) carte.mort(this);
+		
+					if (this.getPointsVieActuels()<=0) {carte.mort(this);soldat.nombreVictimes++;}
 				}
 			}
 		}
-		/*
-		Object[] heros = Carte.hsHeros.toArray();
-int sommeHp=0;
-		for (final Object h:heros){
-			System.out.println("HeeeeermmmmmmHermrmmmmm"+sommeHp);
-			sommeHp+=((Soldat)h).getPointsVieActuels();
-		}
-		FenetreJeu.vieArmeeHeros.setHpCourants(sommeHp);
-		Object[] monstre = Carte.hsMonstres.toArray();
-		sommeHp=0;
-				for (final Object m:monstre){
-					sommeHp+=((Soldat)m).getPointsVieActuels();
-				}
-		FenetreJeu.vieArmeeMonstres.setHpCourants(sommeHp);
-*/
-		FenetreJeu.vieArmeeMonstres.refresh();
+		FenetreJeu.vieArmeeMonstres.refresh(); // Fonction qui recalcule la jauge de vie
 		FenetreJeu.vieArmeeHeros.refresh();
 		FenetreJeu.vieArmeeMonstres.repaint();
 		FenetreJeu.vieArmeeHeros.repaint();
@@ -148,7 +103,6 @@ int sommeHp=0;
 			carte.elements[pos.getX()][pos.getY()]=this;
 			carte.elements[pos.getX()][pos.getY()].setEstVide(false);
 		
-//			System.out.println("Soldat seDeplace" + pos);
 		}
 	}
 
@@ -181,7 +135,7 @@ int sommeHp=0;
 			
 	}
 	public String toString(){
-		return " "+race+" "+nom+" (" + pointsVieActuels + "PV/" + pointsVieMax + ")";
+		return " "+race+" "+nom+" (" + pointsVieActuels + "PV/" + pointsVieMax + ")"+" (Victimes : "+nombreVictimes+" )";
 	}
 	
 	public Boolean estAPortee(Soldat ennemi){
@@ -190,14 +144,11 @@ int sommeHp=0;
 	}
 	public void seDessiner(Graphics g) {
 		super.seDessiner(g);
-		//tdm[0]=identifiant;
-		System.out.println("dddddddddddddd"+identifiant);
 		g.setColor(COULEUR_EAU);
 		Font police=new Font("Arial",7, 28);
 		g.setFont(police);
 		g.setColor(COULEUR_EAU);
 		if (this.estVisible)g.drawString(""+identifiant, pos.getX()*NB_PIX_CASE, NB_PIX_CASE*2/3+pos.getY()*NB_PIX_CASE);
-		//g.drawRect(pos.getX()*NB_PIX_CASE, pos.getY()*NB_PIX_CASE, NB_PIX_CASE, NB_PIX_CASE);
 
 	}
 

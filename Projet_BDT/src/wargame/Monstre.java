@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Classe Monstre
- * @author emilie
+ * @author emilie 
  * @version 15/11/16
  */
 public class Monstre  extends Soldat implements Serializable{
@@ -17,8 +17,8 @@ public class Monstre  extends Soldat implements Serializable{
 	 super(carte,type,nom,pos);
 	// TYPE=type;
 		couleur=COULEUR_MONSTRES;
-		identifiant=ident;
-		System.out.println("BHDBHBDHZBDHZBHDBZHDBZHDBZHBDHZBDHZB"+ident);
+		identifiant=""+('A'-ident);
+		System.out.println("BHDBHBDHZBDHZBHDBZHDBZHDBZHBDHZBDHZB"+('A'-ident));
 	}
 
 }

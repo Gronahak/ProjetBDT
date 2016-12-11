@@ -16,4 +16,8 @@ public interface ICarte {
 	boolean actionHeros(Position pos, Position pos2);
 	void jouerSoldats(PanneauJeu pj);
 	void toutDessiner(Graphics g); 
+	
+	public final static int GAUCHE=1;  // Ces trois constantes servent à instancier les divers éléments de la carte à des endroits précis :
+	public final static int DROITE=2;  // les héros dans la partie gauche, les monstres à droite, et les obstacles partout
+	public final static int TOUTE=3;
 }

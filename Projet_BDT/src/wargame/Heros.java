@@ -21,7 +21,7 @@ public class Heros extends Soldat implements Serializable{
 		super(carte,type,nom,pos);
 		//TYPE=type;
 		couleur=COULEUR_HEROS;
-		identifiant=ident;
+		identifiant=""+ident;
 	}
 	
 	public void seReposer(){
