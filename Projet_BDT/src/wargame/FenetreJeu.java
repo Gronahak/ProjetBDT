@@ -3,32 +3,48 @@ package wargame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import wargame.PanneauJeu;
 
-public class FenetreJeu  implements IConfig {
+public class FenetreJeu  /*extends JPanel */implements IConfig {
 	public static int abs=0;
 	public static int ord=0;
+	public static JLabel encoreEnVie;
 	private static Boolean soldatSelectionne=false;
 	private static Position curseur1;
+	public static JaugeVie vieArmeeHeros;
+	public static JaugeVie vieArmeeMonstres;
+	public static PanneauJeu panneauJeu;
 	public static void main(String[] args){
 		
 		JFrame frame = new JFrame("Wargame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-		PanneauJeu panneauJeu = new PanneauJeu();
 		JPanel infosTop = new JPanel();
 		JLabel infosBot = new JLabel("vide");
+	
+		((JComponent) frame.getContentPane()).setBorder (new LineBorder(Color.green)); 
+
+		vieArmeeHeros = new JaugeVie();
+		vieArmeeMonstres = new JaugeVie();
+		//vieArmeeHeros.setVisible(true);
+		//vieArmeeHeros.setOpaque(true);
+		panneauJeu = new PanneauJeu();
+
 		
 		JButton finDuTour=new JButton("Fin du tour");
-		JLabel encoreEnVie=new JLabel("Il reste "+panneauJeu.nbSoldats());
+		encoreEnVie=new JLabel();
+		encoreEnVie.setText("Il reste "+panneauJeu.nbSoldats());
 		
 		infosTop.add(finDuTour);
 		infosTop.add(encoreEnVie);
@@ -77,12 +93,19 @@ public class FenetreJeu  implements IConfig {
 
 		frame.getContentPane().add(infosTop,BorderLayout.NORTH);
 		frame.getContentPane().add(infosBot,BorderLayout.SOUTH);
-
+		frame.getContentPane().add(vieArmeeHeros,BorderLayout.WEST);
+		frame.getContentPane().add(vieArmeeMonstres,BorderLayout.EAST);
 
 		frame.setLocation(POSITION_X, POSITION_Y);
 		frame.pack();
 		frame.setVisible(true);
 		
-		
 	}
+	/*
+	public void paintComponent(Graphics g){
+
+		super.paintComponent(g);
+	//	vieArmeeHeros.seDessiner(g);
+	//	vieArmeeMonstres.seDessiner(g);
+	}*/
 }
