@@ -8,6 +8,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -53,6 +59,63 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 		});
 		encoreEnVie=new JLabel();
 		encoreEnVie.setText("Il reste "+panneauJeu.nbSoldats());
+		
+
+		/**
+		 * Bouton pour la sauvegarde de la partie en cours.
+		 */
+		JButton sauvegarde = new JButton("Sauvegarder partie");
+		sauvegarde.addActionListener(new ActionListener() {
+			
+			/**
+			 * Effectue la sauvegarde de la partie au clic sur le bouton.
+			 */
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Sauvegarde de la partie...");
+				FileOutputStream f;
+				try {
+					f = new FileOutputStream("wargame.ser");
+					ObjectOutputStream oos = new ObjectOutputStream(f);
+					oos.writeObject(panneauJeu.getCarte());
+					oos.flush();
+					oos.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		/**
+		 * Bouton pour reprendre la dernière partie sauvegardée.
+		 */
+		JButton restaurer = new JButton("Restaurer partie");
+		restaurer.addActionListener(new ActionListener() {
+			
+			/**
+			 * Effectue la restauration de la dernière partie sauvegardée
+			 * au clic sur le bouton
+			 */
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Reprise de la partie...");
+				FileInputStream fInPut;
+				try {
+					fInPut = new FileInputStream("wargame.ser");
+					ObjectInputStream ois = new ObjectInputStream(fInPut);
+					final Carte savedMap = (Carte) ois.readObject();
+					panneauJeu.setCarte(savedMap);
+					panneauJeu.repaint();
+					ois.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
 		
 		infosTop.add(finDuTour);
 		infosTop.add(encoreEnVie);

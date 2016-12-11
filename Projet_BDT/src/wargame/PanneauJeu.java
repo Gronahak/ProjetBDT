@@ -7,7 +7,7 @@ public class PanneauJeu extends JPanel implements IConfig {
 
 	
 	private static final long serialVersionUID = 1L;
-	Carte carte;
+	protected Carte carte;
 
 	PanneauJeu(){
 		carte=new Carte();
@@ -39,5 +39,11 @@ public class PanneauJeu extends JPanel implements IConfig {
 	}
 	public String nbSoldats(){
 		return carte.nombreSoldatsRestant();
+	}
+	public void setCarte(Carte map){
+		carte=map;
+	}
+	public Carte getCarte(){
+		return carte;
 	}
 }
