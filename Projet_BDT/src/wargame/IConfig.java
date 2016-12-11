@@ -1,10 +1,12 @@
 package wargame;
 import java.awt.Color;
+
 /**
- * 
- * @author emilie
- *
+ * Interface pour la configuration de la carte
+ * @author Emilie, Hugo, Rémy
+ * @version 11-11-2016
  */
+
 public interface IConfig {
 	int LARGEUR_CARTE = 25; 
 	int HAUTEUR_CARTE = 15; // en nombre de cases

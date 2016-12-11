@@ -2,7 +2,6 @@ package wargame;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-//import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +22,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import wargame.PanneauJeu;
 
+/**
+ * Classe fenetreJeu
+ * @author Emilie, Hugo, Rémy
+ * @version 11-11-2016
+ */
+
 public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 	/**
 	 * 
@@ -36,15 +41,16 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 	public static JaugeVie vieArmeeHeros;
 	public static JaugeVie vieArmeeMonstres;
 	public static PanneauJeu panneauJeu;
+	
 	public static void main(String[] args){
-		
+
 		JFrame frame = new JFrame("Wargame");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
+
 		JPanel infosTop = new JPanel();
 		 final JLabel infosBot = new JLabel("vide");
 	
-//		((JComponent) frame.getContentPane()).setBorder (new LineBorder(Color.green)); 
+
 
 		vieArmeeHeros = new JaugeVie();
 		vieArmeeMonstres = new JaugeVie();
@@ -52,7 +58,9 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 		//vieArmeeHeros.setOpaque(true);
 		panneauJeu = new PanneauJeu();
 
-		
+		/**
+		 * Bouton pour la fin du tour du joueur
+		 */
 		JButton finDuTour=new JButton("Fin du tour");
 		finDuTour.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -60,36 +68,35 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 				panneauJeu.repaint();
 			}
 		});
-		
+
 		finDuTour.setFocusable(true);
-		finDuTour.addKeyListener (new KeyListener() {
 		
-			
+
+		finDuTour.addKeyListener (new KeyListener() {
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
-			
+
+
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
 			}
-			
+
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()!=32);
-				
+
 			}
 		});
+
 		encoreEnVie=new JLabel();
 		encoreEnVie.setText("Il reste "+panneauJeu.nbSoldats());
-		
 
 		/**
 		 * Bouton pour la sauvegarde de la partie en cours.
 		 */
 		JButton sauvegarde = new JButton("Sauvegarder partie");
 		sauvegarde.addActionListener(new ActionListener() {
-			
+
 			/**
 			 * Effectue la sauvegarde de la partie au clic sur le bouton.
 			 */
@@ -103,8 +110,7 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 					oos.writeObject(encoreEnVie);
 					oos.writeObject(vieArmeeHeros);
 					oos.writeObject(vieArmeeMonstres);
-					
-					
+
 					oos.flush();
 					oos.close();
 				} catch (FileNotFoundException e1) {
@@ -114,12 +120,13 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 				}
 			}
 		});
+		
 		/**
 		 * Bouton pour reprendre la dernière partie sauvegardée.
 		 */
 		JButton restaurer = new JButton("Restaurer partie");
 		restaurer.addActionListener(new ActionListener() {
-			
+
 			/**
 			 * Effectue la restauration de la dernière partie sauvegardée
 			 * au clic sur le bouton
@@ -134,7 +141,7 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 					FenetreJeu.encoreEnVie =(JLabel) ois.readObject();
 					FenetreJeu.vieArmeeHeros=(JaugeVie) ois.readObject();
 					FenetreJeu.vieArmeeMonstres=(JaugeVie) ois.readObject();
-				//	panneauJeu.repaint();
+					//	panneauJeu.repaint();
 					ois.close();
 					return ;
 
@@ -147,32 +154,37 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 				}
 			}
 		});
-		
-		
+
+
 		infosTop.add(finDuTour);
 		infosTop.add(encoreEnVie);
 		infosTop.add(sauvegarde);
 		infosTop.add(restaurer);
 
+		/**
+		 * Ecouteur souris pour recuperer information position
+		 */
 		panneauJeu.addMouseMotionListener(new MouseAdapter(){
 			public void mouseMoved(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
 				ord=e.getY()/NB_PIX_CASE;
 				Position curseur=new Position(abs,ord);
 				if (curseur.estValide())
-			infosBot.setText(curseur+panneauJeu.getInfos(curseur));
+					infosBot.setText(curseur+panneauJeu.getInfos(curseur));
 			}
-		})	;
-		
+		});
+
+		/**
+		 * Ecouteur souris pour recuperer soldat
+		 */
 		panneauJeu.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
 				ord=e.getY()/NB_PIX_CASE;
 
 				curseur1=new Position(abs,ord);
-				
+
 				if (panneauJeu.carte.getElement(curseur1) instanceof Heros){
-					
 					soldatSelectionne=true;
 				}
 
@@ -183,15 +195,15 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 				Position curseur=new Position(abs,ord);
 				if (soldatSelectionne==true){
 
-						panneauJeu.carte.actionHeros(curseur1, curseur);
+					panneauJeu.carte.actionHeros(curseur1, curseur);
 
-						soldatSelectionne=false;
-						panneauJeu.repaint();
+					soldatSelectionne=false;
+					panneauJeu.repaint();
 				}
 
 			}
-		})	;
-		
+		});
+
 		infosTop.setOpaque(true);
 		infosTop.setPreferredSize(new Dimension(LARGEUR_CARTE*NB_PIX_CASE,2*NB_PIX_CASE));
 		infosTop.setBackground(COULEUR_VIDE);
@@ -212,4 +224,6 @@ public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 		
 	}
 
+
+	
 }
