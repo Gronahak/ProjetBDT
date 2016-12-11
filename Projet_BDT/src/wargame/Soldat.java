@@ -52,26 +52,79 @@ public  class Soldat  extends Element implements ISoldat  {
 		if (this.pos.estVoisine(soldat.pos)){
 			forceDeFrappe=(int)Math.floor(Math.random()*this.getPuissance());
 			soldat.diminuerPointsVieActuels(forceDeFrappe);
+			
+			/* Baisser les PV dans les jauges */
+			/*
+			 * if (soldat instanceof Monstre)
+				FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
+			else	 
+				FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
+			
+			FenetreJeu.vieArmeeMonstres.repaint();
+			FenetreJeu.vieArmeeHeros.repaint();
+			*/
 			if (soldat.getPointsVieActuels()<=0) carte.mort(soldat);
 			else {
 				forceDeFrappe=(int)Math.floor(Math.random()*soldat.getPuissance());
 				this.diminuerPointsVieActuels(forceDeFrappe);
+				/*
+				if (soldat instanceof Monstre)
+					FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
+				else	 
+					FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
+				
+				FenetreJeu.vieArmeeMonstres.repaint();
+				FenetreJeu.vieArmeeHeros.repaint();				
+				*/
 				if (this.getPointsVieActuels()<=0) carte.mort(this);
 			}
 		}
 		else {
 			forceDeFrappe=(int)Math.floor(Math.random()*this.getTir());
 			soldat.diminuerPointsVieActuels(forceDeFrappe);
+			/*
+			if (soldat instanceof Monstre)
+				FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
+			else	 
+				FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
+			
+			FenetreJeu.vieArmeeMonstres.repaint();
+			FenetreJeu.vieArmeeHeros.repaint();
+			*/
 			if (soldat.getPointsVieActuels()<=0) carte.mort(soldat);
 			else {
 				if (soldat.estAPortee(this)){
 					forceDeFrappe=(int)Math.floor(Math.random()*soldat.getTir());
 					this.diminuerPointsVieActuels(forceDeFrappe);
+					/*
+					if (soldat instanceof Monstre)
+						FenetreJeu.vieArmeeHeros.decHp(forceDeFrappe);
+					else	 
+						FenetreJeu.vieArmeeMonstres.decHp(forceDeFrappe);
+					
+					FenetreJeu.vieArmeeMonstres.repaint();
+					FenetreJeu.vieArmeeHeros.repaint();
+					*/
 					if (this.getPointsVieActuels()<=0) carte.mort(this);
 				}
 			}
 		}
-		
+		Object[] heros = Carte.hsHeros.toArray();
+int sommeHp=0;
+		for (final Object h:heros){
+			System.out.println("HeeeeermmmmmmHermrmmmmm"+sommeHp);
+			sommeHp+=((Soldat)h).getPointsVieActuels();
+		}
+		FenetreJeu.vieArmeeHeros.setHpCourants(sommeHp);
+		Object[] monstre = Carte.hsMonstres.toArray();
+		sommeHp=0;
+				for (final Object m:monstre){
+					sommeHp+=((Soldat)m).getPointsVieActuels();
+				}
+		FenetreJeu.vieArmeeMonstres.setHpCourants(sommeHp);
+
+		FenetreJeu.vieArmeeMonstres.repaint();
+		FenetreJeu.vieArmeeHeros.repaint();
 	}
 
 	public void seDeplace(Position newPos){
@@ -102,6 +155,8 @@ public  class Soldat  extends Element implements ISoldat  {
 	}
 	public void diminuerPointsVieActuels(int pv){
 		pointsVieActuels-=pv;
+		if (pointsVieActuels<0)pointsVieActuels=0;
+			
 	}
 	public String toString(){
 		return " "+race+" "+nom+" (" + pointsVieActuels + "PV/" + pointsVieMax + ")";
