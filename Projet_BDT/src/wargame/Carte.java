@@ -1,13 +1,18 @@
 package wargame;
 
 import java.awt.Graphics;
+import java.util.HashSet;
+import java.util.Iterator;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Carte extends JPanel implements ICarte, IConfig {
 	private Element[][] elements;
 	private Heros[] heros;
 	private Monstre[] monstres ;
+	public static HashSet hsHeros;
+	public static HashSet hsMonstres;
 	private Obstacle[] obstacles;
 	private final static int GAUCHE=1;
 	private final static int DROITE=2;
@@ -19,19 +24,49 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
 				elements[i][j] = new Element(new Position(i, j));
 			}
+		
+		/*
 		heros = new Heros[NB_HEROS];
 		for (i = 0; i < NB_HEROS; i++) {
 			heros[i] = new Heros(this,ISoldat.TypesH.getTypeHAlea(),"Y",trouvePositionVide(GAUCHE));
-		
+			
 			elements[heros[i].getPosition().getX()][heros[i].getPosition().getY()] = heros[i];
 		}
+		*/
+		/*
 		monstres = new Monstre[NB_MONSTRES];
 		for (i = 0; i < NB_MONSTRES; i++) {
 			monstres[i] = new Monstre(this,ISoldat.TypesM.getTypeMAlea(),"Y",trouvePositionVide(DROITE));
 			
 			elements[monstres[i].getPosition().getX()][monstres[i].getPosition().getY()] = monstres[i];
-
 		}
+		*/
+		hsHeros=new HashSet();
+		int sommeHP=0,soldatHP=0;
+		for (i = 0; i < NB_HEROS; i++) {
+			Heros h = new Heros(this,ISoldat.TypesH.getTypeHAlea(),"Y",trouvePositionVide(GAUCHE));
+			//System.out.println(h.getPoints());
+			soldatHP=h.getPoints();
+			FenetreJeu.vieArmeeHeros.addHp(soldatHP);
+			sommeHP+=soldatHP;
+			hsHeros.add(h);
+			elements[h.getPosition().getX()][h.getPosition().getY()] = h;
+		}
+		FenetreJeu.vieArmeeHeros.setHp(sommeHP);
+		sommeHP=0;
+		soldatHP=0;
+		hsMonstres=new HashSet();
+		for (i = 0; i < NB_MONSTRES; i++) {
+			Monstre m = new Monstre(this,ISoldat.TypesM.getTypeMAlea(),"Y",trouvePositionVide(DROITE));
+			soldatHP=m.getPoints();
+
+			FenetreJeu.vieArmeeMonstres.addHp(soldatHP);
+			sommeHP+=soldatHP;
+			hsMonstres.add(m);
+			elements[m.getPosition().getX()][m.getPosition().getY()] = m;
+		}			
+		FenetreJeu.vieArmeeMonstres.setHp(sommeHP);
+
 		obstacles= new Obstacle[NB_OBSTACLES];
 		for (i = 0; i < NB_OBSTACLES; i++) {
 			obstacles[i] = new Obstacle(Obstacle.TypeObstacle.getObstacleAlea(),trouvePositionVide(TOUTE));
@@ -79,6 +114,8 @@ public class Carte extends JPanel implements ICarte, IConfig {
 	}
 
 	public Heros trouveHeros() { // Trouve aléatoirement un héros sur la carte
+		
+		heros=(Heros[]) hsHeros.toArray();
 		return heros[(int) Math.floor(Math.random()) * heros.length];
 	}
 
@@ -112,17 +149,17 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			System.out.println(elements[soldat.pos.getX()][soldat.pos.getY()]+""+elements[soldat.pos.getX()][soldat.pos.getY()].couleur+""+elements[soldat.pos.getX()][soldat.pos.getY()].pos);
 
 			//System.out.println("1\t"+soldat.getPosition());
-			System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
-System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][pos.getY()].couleur);
+		//	System.out.println("WTF1 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+//System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][pos.getY()].couleur);
 			soldat.seDeplace(pos);
-			System.out.println("WTF2 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+	//		System.out.println("WTF2 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
 			
 			elements[pos.getX()][pos.getY()]=soldat;
-			System.out.println("WTF3 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
+		//	System.out.println("WTF3 : pos de soldat: "+soldat.pos+"WTF pos de elements"+elements[pos.getX()][pos.getY()].pos);
 			
-			//((Soldat)elements[pos.getX()][pos.getY()]).seDeplace(pos);
+//((Soldat)elements[pos.getX()][pos.getY()]).seDeplace(pos);
 			//System.out.println("2\t"+soldat.getPosition());
-			System.out.println(elements[pos.getX()][pos.getY()]+""+elements[pos.getX()][pos.getY()].couleur+""+elements[pos.getX()][pos.getY()].pos);
+		//	System.out.println(elements[pos.getX()][pos.getY()]+""+elements[pos.getX()][pos.getY()].couleur+""+elements[pos.getX()][pos.getY()].pos);
 
 			actualiserChampDeVision();
 			return true;
@@ -132,14 +169,26 @@ System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][po
 
 	public void mort(Soldat perso) {
 		elements[perso.getPosition().getX()][perso.getPosition().getY()]=new Element(new Position(perso.getPosition().getX(),perso.getPosition().getY()));
-
+		hsHeros.remove(perso);
+		hsMonstres.remove(perso);
 		/* utiliser tables de hash, au moins pour les 2 tableaux monstres et héros et virer le soldat du tableau le cas échéant quand il meurt pour perdre la vision autour du-dit soldat*/
 		actualiserChampDeVision();
+	//	PanneauJeu pj=(PanneauJeu) getParent();
+		FenetreJeu.encoreEnVie.setText("Il reste "+nombreSoldatsRestant());
 
 	}
 
 	public boolean actionHeros(Position pos, Position pos2) {
-
+		if (hsHeros.contains(elements[pos.getX()][pos.getY()])) System.out.println("HHHHHHOH");
+		else System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiOH");
+		Iterator iterateurHeros = hsHeros.iterator();
+		while(iterateurHeros.hasNext()){
+		     // System.out.println(iterateurHeros.next());
+		    Object her=iterateurHeros.next();
+		    System.out.println("itemgle: "+her);
+			 
+		    if (her==elements[pos.getX()][pos.getY()])System.out.println("mouiii");else System.out.println("mmnooooon");
+		}
 		if (!(elements[pos.getX()][pos.getY()] instanceof Heros)){
 			return false;
 		}
@@ -149,6 +198,7 @@ System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][po
 			return true;
 
 		}
+
 		else if (elements[pos2.getX()][pos2.getY()] instanceof Monstre
 				&& (((Soldat)elements[pos.getX()][pos.getY()]).estAPortee((Monstre)elements[pos2.getX()][pos2.getY()]))
 				){
@@ -170,11 +220,17 @@ System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][po
 		actualiserChampDeVision();
 		for (i = 0; i < LARGEUR_CARTE; i++)
 			for (j = 0; j < HAUTEUR_CARTE; j++) {
-				System.out.println("("+i+" "+j+"(");
+	//			System.out.println("("+i+" "+j+"(");
 				elements[i][j].seDessiner(g);
 				}
 		System.out.println("______________________");
 
+		Object[] heros = hsHeros.toArray();
+//		monstres =(Monstre[]) hsMonstres.toArray();
+		
+	//	for(Object o : heros)
+
+	//	      System.out.println(o);
 	}
 
 	public boolean estVide(Position pos) {
@@ -182,18 +238,29 @@ System.out.println("On est d'accord y'a rien dans elem:"+elements[pos.getX()][po
 	}
 
 	public String nombreSoldatsRestant(){
+		Object[] heros = hsHeros.toArray();
+		Object[] monstres = hsMonstres.toArray();
+//		monstres =(Monstre[]) hsMonstres.toArray();
+		
+		for(Object o : heros)
+
+		      System.out.println(o);
 		return ""+heros.length+" héros et "+monstres.length+" monstres";
+
 	}
 	public void actualiserChampDeVision(){
 		int k,l;
+		Object[] heros = hsHeros.toArray();
+
 		for (k=0;k<LARGEUR_CARTE;k++)
 			for(l=0;l<HAUTEUR_CARTE;l++)
 				elements[k][l].estVisible=false;
-		for (final Heros h:heros){
-			int porteeVisuelle=h.getPortee();
+		//Heros[] heross=(Heros[])heros;
+		for (final Object h:heros){
+			int porteeVisuelle=((Soldat) h).getPortee();
 			Position positionTmp=new Position(0,0);
-			for (int i=h.getPosition().getX()-porteeVisuelle;i<=h.getPosition().getX()+porteeVisuelle;i++){
-				for (int j=h.getPosition().getY()-porteeVisuelle;j<=h.getPosition().getY()+porteeVisuelle;j++){
+			for (int i=((Element) h).getPosition().getX()-porteeVisuelle;i<=((Element) h).getPosition().getX()+porteeVisuelle;i++){
+				for (int j=((Element) h).getPosition().getY()-porteeVisuelle;j<=((Element) h).getPosition().getY()+porteeVisuelle;j++){
 					positionTmp.setX(i);
 					positionTmp.setY(j);
 					if (!positionTmp.estValide())continue;
