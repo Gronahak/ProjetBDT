@@ -3,7 +3,7 @@ package wargame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
+//import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,7 +25,7 @@ import javax.swing.border.LineBorder;
 
 import wargame.PanneauJeu;
 
-public class FenetreJeu  /*extends JPanel */implements IConfig {
+public class FenetreJeu  /*extends JPanel */implements IConfig , Serializable{
 	public static int abs=0;
 	public static int ord=0;
 	public static JLabel encoreEnVie;
@@ -76,7 +77,12 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 				try {
 					f = new FileOutputStream("wargame.ser");
 					ObjectOutputStream oos = new ObjectOutputStream(f);
-					oos.writeObject(panneauJeu.getCarte());
+					oos.writeObject(panneauJeu);
+					oos.writeObject(encoreEnVie);
+					oos.writeObject(vieArmeeHeros);
+					oos.writeObject(vieArmeeMonstres);
+					
+					
 					oos.flush();
 					oos.close();
 				} catch (FileNotFoundException e1) {
@@ -102,10 +108,14 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 				try {
 					fInPut = new FileInputStream("wargame.ser");
 					ObjectInputStream ois = new ObjectInputStream(fInPut);
-					final Carte savedMap = (Carte) ois.readObject();
-					panneauJeu.setCarte(savedMap);
-					panneauJeu.repaint();
+					FenetreJeu.panneauJeu = (PanneauJeu) ois.readObject();
+					FenetreJeu.encoreEnVie =(JLabel) ois.readObject();
+					FenetreJeu.vieArmeeHeros=(JaugeVie) ois.readObject();
+					FenetreJeu.vieArmeeMonstres=(JaugeVie) ois.readObject();
+				//	panneauJeu.repaint();
 					ois.close();
+					return ;
+
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
@@ -119,7 +129,9 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 		
 		infosTop.add(finDuTour);
 		infosTop.add(encoreEnVie);
-		
+		infosTop.add(sauvegarde);
+		infosTop.add(restaurer);
+
 		panneauJeu.addMouseMotionListener(new MouseAdapter(){
 			public void mouseMoved(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
@@ -134,18 +146,23 @@ public class FenetreJeu  /*extends JPanel */implements IConfig {
 			public void mousePressed(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
 				ord=e.getY()/NB_PIX_CASE;
+
 				curseur1=new Position(abs,ord);
+				
 				if (panneauJeu.carte.getElement(curseur1) instanceof Heros){
+					
 					soldatSelectionne=true;
 				}
+
 			}
 			public void mouseReleased(MouseEvent e){
 				abs=e.getX()/NB_PIX_CASE;
 				ord=e.getY()/NB_PIX_CASE;
 				Position curseur=new Position(abs,ord);
 				if (soldatSelectionne==true){
-					
+
 						panneauJeu.carte.actionHeros(curseur1, curseur);
+
 						soldatSelectionne=false;
 						panneauJeu.repaint();
 				}

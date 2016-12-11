@@ -2,13 +2,18 @@ package wargame;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 /**
  * Classe Soldat (Heros et Monstres)
  * @author emilie
  * @version 15/11/16
  */
-public  class Soldat  extends Element implements ISoldat  {
+public  class Soldat  extends Element implements ISoldat, Serializable  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final int pointsVieMax;
 	private final int portee;
 	private final int tir;

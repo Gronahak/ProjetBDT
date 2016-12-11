@@ -3,12 +3,17 @@ package wargame;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-public class JaugeVie extends JPanel implements IConfig{
+public class JaugeVie extends JPanel implements IConfig , Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int hpTotaux;//=1; /* Points de vie totaux*/
 	private int hpCourants;//=1;
 	JaugeVie(){

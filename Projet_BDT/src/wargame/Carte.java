@@ -1,18 +1,23 @@
 package wargame;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Carte extends JPanel implements ICarte, IConfig {
+public class Carte extends JPanel implements ICarte, IConfig , Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected Element[][] elements;
 	private Heros[] heros;
 	private Monstre[] monstres ;
-	public static HashSet hsHeros;
-	public static HashSet hsMonstres;
+	public static HashSet<Heros> hsHeros;
+	public static HashSet<Monstre> hsMonstres;
 	private Obstacle[] obstacles;
 	private final static int GAUCHE=1;
 	private final static int DROITE=2;
@@ -41,7 +46,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 			elements[monstres[i].getPosition().getX()][monstres[i].getPosition().getY()] = monstres[i];
 		}
 		*/
-		hsHeros=new HashSet();
+		hsHeros=new HashSet<Heros>();
 		char id='A';
 		int sommeHP=0,soldatHP=0;
 		for (i = 0; i < NB_HEROS; i++) {
@@ -59,7 +64,7 @@ public class Carte extends JPanel implements ICarte, IConfig {
 		FenetreJeu.vieArmeeHeros.setHp(sommeHP);
 		sommeHP=0;
 		soldatHP=0;
-		hsMonstres=new HashSet();
+		hsMonstres=new HashSet<Monstre>();
 		for (i = 0; i < NB_MONSTRES; i++) {
 			System.out.println("Caractère "+i+ " : "+(id+i));
 
@@ -189,19 +194,21 @@ id++;
 	}
 
 	public boolean actionHeros(Position pos, Position pos2) {
+
 		//if (hsHeros.contains(elements[pos.getX()][pos.getY()])) System.out.println("HHHHHHOH");
 		//else System.out.println("iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiOH");
-		Iterator iterateurHeros = hsHeros.iterator();
-		while(iterateurHeros.hasNext()){
+		Iterator<Heros> iterateurHeros = hsHeros.iterator();
+	/*	while(iterateurHeros.hasNext()){
 		     // System.out.println(iterateurHeros.next());
-		    Object her=iterateurHeros.next();
+		//    Object her=iterateurHeros.next();
 		 //   System.out.println("itemgle: "+her);
 			 
 		   // if (her==elements[pos.getX()][pos.getY()])System.out.println("mouiii");else System.out.println("mmnooooon");
-		}
+		}*/
 		if (!(elements[pos.getX()][pos.getY()] instanceof Heros)){
 			return false;
 		}
+		
 		if (elements[pos.getX()][pos.getY()].getCouleur()==COULEUR_HEROS_DEJA_JOUE)return false;
 		if (elements[pos2.getX()][pos2.getY()].estVide()&&pos2.estVoisine(pos)) {
 
@@ -224,7 +231,7 @@ id++;
 	}
 
 	public void jouerSoldats(PanneauJeu pj) {
-		Iterator iterateurHeros = hsHeros.iterator();
+		Iterator<Heros> iterateurHeros = hsHeros.iterator();
 		while(iterateurHeros.hasNext()){
 		    Object herosN=iterateurHeros.next();
 		    if (((Element )herosN).getCouleur()!=COULEUR_HEROS_DEJA_JOUE){
@@ -258,7 +265,7 @@ id++;
 		}
 		System.out.println("______________________");
 
-		Object[] heros = hsHeros.toArray();
+		//Object[] heros = hsHeros.toArray();
 //		monstres =(Monstre[]) hsMonstres.toArray();
 		
 	//	for(Object o : heros)
